@@ -23,6 +23,10 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
   let lastCue = 0;
 
   function respawn(particle) {
+    // Each thread lives on its own depth layer. Far threads are slower,
+    // thinner and dimmer; near ones sweep across everything else. Without
+    // this the whole field reads as one sheet of identical silk ribbons.
+    const depth = random(0, 1);
     Object.assign(particle, {
       x: random(-20, width + 20),
       y: random(-20, height + 20),
@@ -31,8 +35,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       age: random(0, 6),
       life: random(6, 15),
       hue: random(168, 250),
-      speed: random(26, 108),
-      weight: random(0.6, 1.5)
+      speed: random(26, 108) * (0.45 + (1 - depth) * 0.9),
+      weight: random(0.6, 1.5) * (0.55 + (1 - depth) * 0.85),
+      depth
     });
     particle.px = particle.x;
     particle.py = particle.y;
@@ -124,9 +129,12 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       const speedNow = Math.hypot(vx, vy);
       const nearName = reveal > 0.08 && Math.abs(particle.x - width / 2) < width * 0.38 && Math.abs(particle.y - height / 2) < height * 0.2;
       const fade = clamp(Math.min(particle.age, particle.life - particle.age) / 1.4, 0, 1);
+      // Aerial perspective: distant threads lose saturation and brightness,
+      // the way haze eats detail in a real landscape.
+      const haze = 1 - particle.depth * 0.62;
       ctx.strokeStyle = nearName
-        ? `hsla(${particle.hue + 26}, 100%, 82%, ${0.16 + fade * 0.42})`
-        : `hsla(${particle.hue}, 82%, 72%, ${0.06 + fade * 0.2})`;
+        ? `hsla(${particle.hue + 26}, 100%, ${74 + haze * 12}%, ${(0.16 + fade * 0.42) * (0.5 + haze * 0.5)})`
+        : `hsla(${particle.hue}, ${58 + haze * 30}%, ${52 + haze * 24}%, ${(0.06 + fade * 0.2) * (0.4 + haze * 0.6)})`;
       ctx.lineWidth = (nearName ? 1.5 : 0.8) * particle.weight;
       ctx.beginPath();
       ctx.moveTo(particle.px, particle.py);
