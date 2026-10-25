@@ -1,4 +1,4 @@
-import { setup2D, clamp, random, smoothstep, rgba, drawStyledName, drawVignette, drawGlowDot } from "./common.js";
+import { setup2D, clamp, random, smoothstep, rgba, drawStyledName, drawVignette, drawSphereDot, depthFalloff } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { scaledNameTargets } from "../name-shape.js";
 import { fbm3, noise2, easeOutCubic } from "../motion.js";
@@ -45,6 +45,10 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
         tx: target?.x ?? homeX,
         ty: target?.y ?? homeY,
         delay: random(0, 0.6),
+        // Depth lives on its own axis (0 near .. 1 far). The field parallaxes:
+        // far nodes drift slower and sit dimmer, so the web has volume
+        // instead of being one sheet of dots at the same distance.
+        depth: random(0, 1),
         r: random(0.9, 2.4),
         phase: random(0, Math.PI * 2),
         seed: random(0, 50)
@@ -80,8 +84,10 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       } else {
         const driftX = fbm3(node.x * 0.0012, node.y * 0.0012, time * 0.06, { octaves: 2, seed: 9 }) * 26;
         const driftY = fbm3(node.y * 0.0012 + 4, node.x * 0.0012, time * 0.05, { octaves: 2, seed: 13 }) * 26;
-        node.vx += (driftX - node.vx) * dt * 0.9;
-        node.vy += (driftY - node.vy) * dt * 0.9;
+        // Parallax: distant nodes crawl, near ones wander faster.
+        const pace = 1 - node.depth * 0.68;
+        node.vx += (driftX * pace - node.vx) * dt * 0.9;
+        node.vy += (driftY * pace - node.vy) * dt * 0.9;
       }
       node.x += node.vx * dt;
       node.y += node.vy * dt;
@@ -94,7 +100,8 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       }
     }
 
-    // Links
+    // Links — proximity in screen space, but opacity also carries depth so a
+    // line between two far nodes fades into the haze like it would in air.
     ctx.save();
     ctx.lineCap = "round";
     const stride = preview ? 2 : 1;
@@ -108,11 +115,12 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
         const distance = Math.hypot(dx, dy);
         if (distance > linkRadius) continue;
         const strength = 1 - distance / linkRadius;
+        const haze = 1 - ((a.depth + b.depth) / 2) * 0.55;
         const bothNamed = a.named && b.named && gather > 0.1;
         ctx.strokeStyle = bothNamed
           ? `rgba(168,222,255,${(0.28 + gather * 0.5) * strength})`
-          : `rgba(150,168,255,${0.1 * strength})`;
-        ctx.lineWidth = bothNamed ? 1.25 : 0.7;
+          : `rgba(150,168,255,${0.1 * strength * haze})`;
+        ctx.lineWidth = bothNamed ? 1.25 : Math.max(0.35, 0.7 * haze);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -122,19 +130,20 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     }
     ctx.restore();
 
-    // Nodes
+    // Nodes: shaded spheres, dimmed and softened by their own depth layer.
     for (const node of nodes) {
       const twinkle = 0.6 + noise2(node.seed, time * 1.2) * 0.45;
       const named = node.named && gather > 0.05;
-      drawGlowDot(
-        ctx,
-        node.x,
-        node.y,
-        named ? node.r * 1.5 : node.r,
-        named ? "#dff2ff" : "#bdaeff",
-        named ? 13 : 7,
-        named ? clamp(0.35 + gather * 0.65 * twinkle, 0, 1) : clamp(0.35 + twinkle * 0.3, 0, 1)
-      );
+      const far = depthFalloff(node.named ? node.depth * 0.25 : node.depth, { minAlpha: 0.16 });
+      const base = named
+        ? clamp(0.35 + gather * 0.65 * twinkle, 0, 1)
+        : clamp((0.35 + twinkle * 0.3) * far.alpha, 0, 1);
+      drawSphereDot(ctx, node.x, node.y, (named ? node.r * 1.5 : node.r) * far.scale, named ? "#bfe3ff" : "#9c8cf5", {
+        alpha: base,
+        core: "#ffffff",
+        rim: "#5f57b8",
+        blur: named ? 8 : 4 + far.blur
+      });
     }
 
     if (showName && gather > 0.22) {

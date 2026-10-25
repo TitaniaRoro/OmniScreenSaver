@@ -1,10 +1,22 @@
 import {
   setup2D, TAU, clamp, random, smoothstep, rgba,
-  drawStyledName, drawVignette
+  drawStyledName, drawVignette, drawSphereDot
 } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { scaledNameTargets } from "../name-shape.js";
 import { fbm3, noise2, easeOutCubic } from "../motion.js";
+
+/** HSL → hex string, so the sphere shader can ramp its alpha stops. */
+function hueHex(h, s, l) {
+  const sat = s / 100;
+  const lig = Math.min(96, Math.max(4, l)) / 100;
+  const k = n => (n + h / 30) % 12;
+  const a = sat * Math.min(lig, 1 - lig);
+  const f = n => lig - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [f(0), f(8), f(4)]
+    .map(value => Math.round(value * 255).toString(16).padStart(2, "0"))
+    .join("");
+}
 
 /**
  * Starfield Warp.
@@ -90,6 +102,12 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       let sy = cy + star.y * scale;
       const radius = Math.min(5.5, star.r * scale * 0.5);
       let alpha = clamp(0.18 + (1 - star.z) * 0.7, 0.08, 0.95) * (0.7 + 0.3 * Math.sin(time * 1.6 + star.twinkle));
+      // A touch of interstellar reddening: distant stars read cooler and
+      // fainter, nearby ones burn hotter and whiter. Same trick telescopes
+      // use to keep a field of dots from flattening into one wallpaper.
+      const heat = clamp(1 - star.z, 0, 1);
+      const lightness = 72 + heat * 24;
+      const saturation = 84 - heat * 22;
 
       if (gather > 0.001 && namePoints.length) {
         const local = easeOutCubic(clamp((gather - star.delay * 0.5) / (1 - star.delay * 0.5), 0, 1));
@@ -107,13 +125,26 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
 
       if (sx < -50 || sx > width + 50 || sy < -50 || sy > height + 50) continue;
       ctx.globalAlpha = alpha * (1 - gather * 0.25);
-      ctx.fillStyle = `hsl(${star.hue} 84% 86%)`;
-      ctx.beginPath();
-      ctx.arc(sx, sy, radius, 0, TAU);
-      ctx.fill();
+      // Near, big stars get a soft gradient body with an off-centre highlight;
+      // distant specks stay cheap flat points, which is what sells the depth.
+      if (radius >= 1.7 && gather < 0.5) {
+        drawSphereDot(ctx, sx, sy, radius, `#${hueHex(star.hue, saturation, lightness - 14)}`, {
+          alpha: clamp(alpha, 0, 1),
+          core: `#${hueHex(star.hue, 60, 97)}`,
+          rim: `#${hueHex(star.hue, 90, 40)}`,
+          blur: radius * 2.2,
+          specular: 0.4
+        });
+        ctx.globalAlpha = 1;
+      } else {
+        ctx.fillStyle = `hsl(${star.hue} ${saturation}% ${lightness}%)`;
+        ctx.beginPath();
+        ctx.arc(sx, sy, radius, 0, TAU);
+        ctx.fill();
+      }
       if (warp > 0.16) {
         const trail = 1 + warp * 0.55;
-        ctx.strokeStyle = `hsla(${star.hue} 88% 78% / ${alpha * warp * 1.5})`;
+        ctx.strokeStyle = `hsla(${star.hue} ${saturation}% ${lightness - 8}% / ${alpha * warp * 1.5})`;
         ctx.lineWidth = Math.max(0.4, radius * 0.62);
         ctx.beginPath();
         ctx.moveTo(sx, sy);

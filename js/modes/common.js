@@ -236,6 +236,76 @@ export function drawGlowDot(ctx, x, y, radius, color, blur = 12, alpha = 1) {
   ctx.restore();
 }
 
+/**
+ * A dot with real volume: instead of a shadow-blurred flat disc, the light is
+ * built from a radial gradient whose brightest point sits slightly off centre
+ * — toward the key light, away from it falling off into translucency. Add a
+ * tiny specular pin and the eye reads it as a sphere catching light, not a
+ * sticker on the screen. Falls back to `drawGlowDot` for hairline radii where
+ * a gradient would cost more than it buys.
+ */
+export function drawSphereDot(ctx, x, y, radius, color, options = {}) {
+  const {
+    alpha = 1,
+    lightX = -0.34,
+    lightY = -0.4,
+    core = "#ffffff",
+    rim = null,
+    blur = 0,
+    specular = 0.55
+  } = options;
+  if (alpha <= 0.004 || radius <= 0) return;
+  if (radius < 1.6 && blur <= 0) {
+    drawGlowDot(ctx, x, y, radius, color, 0, alpha);
+    return;
+  }
+  const outer = Math.max(radius * 1.9, radius + blur);
+  const lx = x + radius * lightX;
+  const ly = y + radius * lightY;
+  const gradient = ctx.createRadialGradient(lx, ly, radius * 0.06, x, y, outer);
+  // Colours may arrive as hex or any CSS colour string; the alpha ramp below
+  // only understands hex, so anything else keeps its own opacity.
+  const tint = value => (value.startsWith("#") || value.startsWith("rgb"))
+    ? rgba(value, alpha)
+    : value;
+  const rgbaSafe = (value, a) => (value.startsWith("#") || value.startsWith("rgb") ? rgba(value, a) : value);
+  gradient.addColorStop(0, tint(core));
+  gradient.addColorStop(0.32, tint(color));
+  gradient.addColorStop(0.72, rgbaSafe(rim ?? color, alpha * 0.34));
+  gradient.addColorStop(1, rgbaSafe(rim ?? color, 0));
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.arc(x, y, outer, 0, TAU);
+  ctx.fill();
+  // Specular pin — the cue that sells "round and lit".
+  if (specular > 0.02 && radius >= 1.2) {
+    ctx.globalAlpha = alpha * specular;
+    ctx.fillStyle = core;
+    ctx.beginPath();
+    ctx.arc(lx, ly, Math.max(0.35, radius * 0.28), 0, TAU);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+/**
+ * Depth-of-field falloff: things farther away are dimmer, softer and smaller.
+ * Returns { alpha, scale, blur } for a normalised depth (0 = near, 1 = far),
+ * which every layered scene uses so the background actually recedes instead
+ * of sitting on the same plane as the foreground.
+ */
+export function depthFalloff(depth, { minAlpha = 0.18, maxAlpha = 1, minScale = 0.35, maxScale = 1 } = {}) {
+  const t = clamp(depth, 0, 1);
+  const eased = t * t;
+  return {
+    alpha: lerp(maxAlpha, minAlpha, eased),
+    scale: lerp(maxScale, minScale, eased),
+    blur: eased * 6
+  };
+}
+
 export function createStars(count, width, height, speed = 1) {
   return Array.from({ length: count }, () => ({
     x: random(-width / 2, width / 2),
@@ -281,15 +351,47 @@ export function drawStars(ctx, stars, width, height, time, centerX = width / 2, 
 
 /**
  * A night sky that actually twinkles: each star has its own slow rhythm and
- * a touch of scintillation instead of a single global sine.
+ * a touch of scintillation instead of a single global sine. Depth is what
+ * keeps it from looking like paint on a ceiling — faint dust sits far away
+ * and barely moves, while the near handful are bright discs with a soft
+ * atmospheric halo and a cross-flare, exactly how a lens renders them.
  */
-export function drawTwinklingStars(ctx, stars, time, { color = "#e8ecff", base = 0.28 } = {}) {
+export function drawTwinklingStars(ctx, stars, time, { color = "#e8ecff", base = 0.28, halos = true } = {}) {
   for (const star of stars) {
     const slow = 0.5 + 0.5 * Math.sin(time * star.speed + star.phase);
     const scintil = noise2(star.x * 0.01, time * 0.7 + star.phase) * 0.5 + 0.5;
     const alpha = clamp(base + slow * 0.45 + scintil * 0.3, 0.05, 1);
+    const tint = star.warm ? "#ffe6c8" : color;
+    // Depth cue baked into the size: big stars read as near, tiny ones as far.
+    const nearness = clamp((star.r - 0.4) / 1.3, 0, 1);
+    if (halos && nearness > 0.62 && alpha > 0.45) {
+      const outer = star.r * (3.4 + nearness * 3.2);
+      const gradient = ctx.createRadialGradient(star.x, star.y, 0.2, star.x, star.y, outer);
+      gradient.addColorStop(0, rgba(tint, alpha * 0.5));
+      gradient.addColorStop(0.4, rgba(tint, alpha * 0.12));
+      gradient.addColorStop(1, rgba(tint, 0));
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, outer, 0, TAU);
+      ctx.fill();
+      // Cross-flare on the brightest few — a lens artefact, not a dot.
+      if (nearness > 0.85) {
+        const arm = outer * (0.9 + scintil * 0.5);
+        ctx.strokeStyle = rgba(tint, alpha * 0.16);
+        ctx.lineWidth = Math.max(0.4, star.r * 0.22);
+        ctx.beginPath();
+        ctx.moveTo(star.x - arm, star.y);
+        ctx.lineTo(star.x + arm, star.y);
+        ctx.moveTo(star.x, star.y - arm * 0.8);
+        ctx.lineTo(star.x, star.y + arm * 0.8);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = star.warm ? "#ffe6c8" : color;
+    ctx.fillStyle = tint;
     const r = star.r * (0.75 + alpha * 0.5);
     ctx.beginPath();
     ctx.arc(star.x, star.y, r, 0, TAU);

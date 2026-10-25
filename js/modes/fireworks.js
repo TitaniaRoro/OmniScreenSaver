@@ -1,6 +1,6 @@
 import {
   setup2D, TAU, clamp, random, rgba, smoothstep,
-  drawStyledName, drawVignette, makeStarField, drawTwinklingStars
+  drawStyledName, drawVignette, makeStarField, drawTwinklingStars, drawSphereDot
 } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { scaledNameTargets } from "../name-shape.js";
@@ -140,13 +140,16 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
         ctx.fill();
       }
       ctx.globalAlpha = 0.9;
-      ctx.fillStyle = "#fff4d8";
-      ctx.shadowColor = shell.color;
-      ctx.shadowBlur = 14;
-      ctx.beginPath();
-      ctx.arc(shell.x, shell.y, 2.4, 0, TAU);
-      ctx.fill();
-      ctx.shadowBlur = 0;
+      // The shell head is a burning sphere: hot white core falling off to the
+      // mix colour, not a flat dot with a shadow blur stuck on it.
+      drawSphereDot(ctx, shell.x, shell.y, 2.6, shell.color, {
+        alpha: 0.95,
+        core: "#fff8e2",
+        rim: shell.color,
+        blur: 12,
+        specular: 0.7
+      });
+      ctx.globalAlpha = 1;
       if (shell.life <= 0 || shell.vy >= -12) {
         explode(shell);
         shells.splice(index, 1);
