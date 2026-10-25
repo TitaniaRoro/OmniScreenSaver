@@ -26,7 +26,9 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
   let vy = 0;
   let angle = 0;
   let spinVelocity = 0;
-  let hue = 268;
+  // Classic arcade paddle-blue (hue ~200) instead of a full rainbow cycle, so
+  // the lettering matches the scene's cool blue glow.
+  let hue = 200;
   let trail = [];
   let ripples = [];
   let lastSound = -1;
@@ -198,7 +200,10 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
       }
     });
 
-    hue = (hue + dt * 7 + fbm3(time * 0.2, 1, 0, { octaves: 2, seed: 4 }) * 2) % 360;
+    // Gentle shimmer around the base arcade blue — no drifting through every
+    // colour of the wheel, which used to clash with the scene palette.
+    const drift = fbm3(time * 0.2, 1, 0, { octaves: 2, seed: 4 });
+    hue = 200 + clamp(drift * 18, -18, 18);
     impact *= Math.exp(-3 * step);
     drawVignette(ctx, width, height, 0.34);
   }
