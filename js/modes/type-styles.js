@@ -75,14 +75,14 @@ export const TYPE_STYLES = {
     note: "Stencilled wall sign, lit by a swaying lamp."
   },
   bounce: {
-    family: FONTS.display,
-    weight: 700,
-    tracking: 0.01,
+    family: FONTS.pixel,
+    weight: 400,
+    tracking: 0.02,
     slant: 0,
-    palette: { core: "#fff6fd", edge: "#ff9ad8", glow: "#a06bff", accent: "#7ef0d6" },
+    palette: { core: "#eafcff", edge: "#59e0ff", glow: "#3aa8ff", accent: "#b8f5ff" },
     effects: ["glow", "squash"],
     reveal: "bounce",
-    note: "Soft, heavy lettering that squashes on impact."
+    note: "Arcade-block lettering in classic paddle-blue that squashes on impact."
   },
   spin: {
     family: FONTS.display,
@@ -145,14 +145,14 @@ export const TYPE_STYLES = {
     note: "Serif lettering revealed by the passing aurora curtain."
   },
   lava: {
-    family: FONTS.display,
-    weight: 700,
-    tracking: 0.005,
+    family: FONTS.serif,
+    weight: 400,
+    tracking: 0.03,
     slant: 0,
-    palette: { core: "#fff0cf", edge: "#ff9445", glow: "#ff5f2e", accent: "#ffd166" },
+    palette: { core: "#ffe9c2", edge: "#ff8a3a", glow: "#ff4d1c", accent: "#ffc25e" },
     effects: ["glow", "melt"],
     reveal: "melt",
-    note: "Molten, slowly dripping letterforms."
+    note: "Heavy serif letterforms carved from cooling basalt, molten, slowly dripping."
   },
   flow: {
     family: FONTS.display,
@@ -209,10 +209,13 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.05,
     slant: 0,
-    palette: { core: "#ffeccb", edge: "#ffb98a", glow: "#ff8f5e", accent: "#9fe6ee" },
-    effects: ["wetSand", "glow"],
+    // Daylight scene: the name is cut into bright wet sand as a soft shadowed
+    // groove — warm sand tones, no neon glow (the old sunset-orange glow read
+    // as unrelated to the pale sky-and-sand aesthetic).
+    palette: { core: "#f7e3bd", edge: "#d9ae76", glow: "#c08a4e", accent: "#fdf2da" },
+    effects: ["wetSand"],
     reveal: "wash",
-    note: "Written into wet sand, then taken back by the tide."
+    note: "Written into bright wet sand as an indented groove, then taken back by the tide."
   },
   pixel: {
     family: FONTS.pixel,

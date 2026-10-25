@@ -54,7 +54,7 @@ The gallery contains **19 visual modes**. Each mode has its own ambient sound pr
 | 💫 **Mystify** | Neon ribbons fold around the outline of your name, then drift free. |
 | 🪄 **3D Pipes** | Colorful pipes grow through a three-dimensional space. |
 | 🧭 **3D Maze** | Wander through a self-walking maze with your name on its walls. |
-| 🏓 **Bouncing Name** | Your name becomes the bouncing, color-shifting centerpiece. |
+| 🏓 **Bouncing Name** | Your name becomes the bouncing arcade-block centerpiece. |
 | 🔷 **3D Spinning Name** | Shimmering letters turn slowly in space. |
 | 🌧️ **Matrix Rain** | Falling characters gather into a glowing name, then wash away. |
 | 💻 **Hacker Terminal** | A friendly terminal types a welcome and reveals your name in glowing text. |
