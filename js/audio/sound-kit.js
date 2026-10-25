@@ -17,7 +17,7 @@ const PROFILES = {
   clock:        { noise: .023, filter: 1300, filterType: "lowpass", tones: [110, 164.81], type: "sine", lfo: .02, cue: "clockTick", interval: 1 },
   campfire:     { noise: .12, filter: 870, filterType: "bandpass", tones: [55, 82.41], type: "sine", lfo: .035, cue: "crackle", interval: 3.7 },
   beach:        { noise: .11, filter: 740, filterType: "lowpass", tones: [65.41, 98], type: "sine", lfo: .025, cue: "wave", interval: 6.5 },
-  pixel:        { noise: .025, filter: 1850, filterType: "lowpass", tones: [110, 164.81, 220], type: "triangle", lfo: .08, cue: "pixelChime", interval: 10 }
+  layered:      { noise: .09, filter: 620, filterType: "bandpass", tones: [65.41, 98, 130.81], type: "sine", lfo: .05, cue: "crackle", interval: 4.6 }
 };
 
 function createNoiseBuffer(context) {
