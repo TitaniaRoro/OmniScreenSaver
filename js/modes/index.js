@@ -16,7 +16,7 @@ import { createMode as createSynthwave } from "./synthwave.js";
 import { createMode as createClock } from "./clock.js";
 import { createMode as createCampfire } from "./campfire.js";
 import { createMode as createBeach } from "./beach.js";
-import { createMode as createPixel } from "./pixel.js";
+import { createMode as createLayered } from "./layered-camp.js";
 
 export const MODES = [
   { id: "starfield", nameKey: "modeStarfield", descriptionKey: "descStarfield", icon: "✧", art: "starfield", category: "cosmic", create: createStarfield },
@@ -37,7 +37,7 @@ export const MODES = [
   { id: "clock", nameKey: "modeClock", descriptionKey: "descClock", icon: "◷", art: "clock", category: "calm", create: createClock },
   { id: "campfire", nameKey: "modeCampfire", descriptionKey: "descCampfire", icon: "♨", art: "campfire", category: "campfire", create: createCampfire },
   { id: "beach", nameKey: "modeBeach", descriptionKey: "descBeach", icon: "☾", art: "beach", category: "campfire", create: createBeach },
-  { id: "pixel", nameKey: "modePixel", descriptionKey: "descPixel", icon: "▦", art: "pixel", category: "campfire", create: createPixel }
+  { id: "layered", nameKey: "modeLayered", descriptionKey: "descLayered", icon: "◭", art: "layered", category: "campfire", create: createLayered }
 ];
 
 export const MODES_BY_ID = new Map(MODES.map(mode => [mode.id, mode]));

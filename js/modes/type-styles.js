@@ -3,7 +3,7 @@
  *
  * A name should look like it belongs to the scene it is standing in: a
  * lantern-lit sign in the maze, warm serif lettering over a campfire, chrome
- * italics above a neon grid, blocky pixels in the retro campsite. Each mode
+ * italics above a neon grid, solid extruded slabs in the layered camp. Each mode
  * therefore picks one typeface treatment from this file and pairs it with its
  * own reveal choreography (see `reveal`).
  *
@@ -217,15 +217,16 @@ export const TYPE_STYLES = {
     reveal: "wash",
     note: "Written into bright wet sand as an indented groove, then taken back by the tide."
   },
-  pixel: {
-    family: FONTS.pixel,
-    weight: 400,
-    tracking: 0.02,
+  layered: {
+    family: FONTS.tech,
+    weight: 700,
+    tracking: 0.08,
     slant: 0,
-    palette: { core: "#ffd88a", edge: "#ff8a3c", glow: "#ff6a20", accent: "#ffe9a8" },
-    effects: ["pixel", "glow"],
-    reveal: "pixelBuild",
-    note: "Chunky 8-bit letters with flames licking above them."
+    scale: 1.05,
+    palette: { core: "#ffdca0", edge: "#ff9a4e", glow: "#ff7a2c", accent: "#fff2cf" },
+    effects: ["extrude", "ember"],
+    reveal: "slabStack",
+    note: "Letters assembled as solid isometric slabs that rise out of the ground."
   }
 };
 
