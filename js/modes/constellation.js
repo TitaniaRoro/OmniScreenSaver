@@ -26,7 +26,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     width = w;
     height = h;
     const targetPoints = showName
-      ? scaledNameTargets(shape, w, h, preview ? 60 : 150, 0.56, preview ? 0.32 : 0.22)
+      ? scaledNameTargets(shape, w, h, preview ? 60 : 150, 0.46, preview ? 0.26 : 0.17)
       : [];
     const extra = Math.round(preview ? 26 : 74);
     const count = targetPoints.length + extra;
@@ -149,9 +149,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     if (showName && gather > 0.22) {
       drawStyledName(ctx, name, width / 2, height / 2, {
         style,
-        size: Math.min(height * 0.16, width * 0.085),
+        size: Math.min(height * 0.12, width * 0.065),
         maxWidth: width * 0.6,
-        maxHeight: height * 0.2,
+        maxHeight: height * 0.15,
         minSize: 11,
         language,
         time,

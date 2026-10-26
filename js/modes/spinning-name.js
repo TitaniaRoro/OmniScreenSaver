@@ -51,7 +51,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
 
     // Font metrics are multiplied by pr below, so glyph detail lands on the
     // device-pixel grid rather than being upsampled (crisp, not chunky).
-    const size = clamp(Math.min(h * 0.42, w * 0.86 / Math.max(1, clusters.length * 0.62)), 26, 220) * pr;
+    const size = clamp(Math.min(h * 0.3, w * 0.62 / Math.max(1, clusters.length * 0.62)), 26, 160) * pr;
     wc.font = `${style.weight} ${size}px ${style.family}`;
     wc.textAlign = "center";
     wc.textBaseline = "middle";

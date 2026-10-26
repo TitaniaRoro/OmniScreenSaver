@@ -236,9 +236,9 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
     if (showName) {
       drawStyledName(ctx, greeting, width / 2, height * 0.73, {
         style,
-        size: Math.min(height * 0.09, width * 0.055),
+        size: Math.min(height * 0.075, width * 0.045),
         maxWidth: width * 0.82,
-        maxHeight: height * 0.1,
+        maxHeight: height * 0.08,
         minSize: 12,
         language,
         time,

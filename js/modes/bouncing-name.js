@@ -55,7 +55,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
   function frame(dt, time) {
     const step = Math.min(dt, 1 / 30);
     const text = label();
-    const size = clamp(Math.min(width * 0.13, height * 0.2), 22, 150);
+    const size = clamp(Math.min(width * 0.1, height * 0.15), 22, 110);
     ctx.font = `${style.weight} ${size}px ${style.family}`;
     const textWidth = ctx.measureText(text).width + (style.tracking || 0) * size * text.length;
     const radiusX = textWidth / 2 + size * 0.22;
@@ -157,7 +157,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
           style,
           size,
           maxWidth: width * 0.8,
-          maxHeight: height * 0.26,
+          maxHeight: height * 0.2,
           minSize: 14,
           language,
           time,
@@ -175,7 +175,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
       style,
       size,
       maxWidth: width * 0.8,
-      maxHeight: height * 0.26,
+      maxHeight: height * 0.2,
       minSize: 14,
       language,
       time,

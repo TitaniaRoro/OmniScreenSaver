@@ -37,7 +37,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     height = h;
     stars = makeStarField(preview ? 34 : 120, w, h, { topRatio: 0.78, seed: 6 });
     targets = showName
-      ? scaledNameTargets(shape, w, h, preview ? 70 : 210, 0.52, preview ? 0.34 : 0.2, { x: 0, y: -height * 0.06 })
+      ? scaledNameTargets(shape, w, h, preview ? 70 : 210, 0.42, preview ? 0.28 : 0.15, { x: 0, y: -height * 0.06 })
       : [];
     shells = [];
     sparks = [];
@@ -250,9 +250,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     if (showName && ignite > 0.15) {
       drawStyledName(ctx, name, width / 2, height * 0.44, {
         style,
-        size: Math.min(height * 0.16, width * 0.09),
+        size: Math.min(height * 0.12, width * 0.07),
         maxWidth: width * 0.62,
-        maxHeight: height * 0.18,
+        maxHeight: height * 0.14,
         minSize: 12,
         language,
         time,

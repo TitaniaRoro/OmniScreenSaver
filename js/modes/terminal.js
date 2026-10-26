@@ -109,7 +109,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
     if (showName && cycle > nameStart) {
       const progress = clamp((cycle - nameStart) / 2.6, 0, 1);
       const metrics = measureName(ctx, name, style, Math.min(panelH * 0.2, panelW * 0.09), language);
-      const size = metrics ? Math.min(panelH * 0.2, panelW * 0.09) : 60;
+      const size = metrics ? Math.min(panelH * 0.15, panelW * 0.07) : 60;
       const revealGraphemes = metrics.clusters.length;
       const typedCount = Math.ceil(progress * revealGraphemes * 1.25);
 

@@ -48,7 +48,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       twinkle: random(0, TAU)
     }));
     namePoints = showName
-      ? scaledNameTargets(shape, width, height, preview ? 120 : 420, 0.6, preview ? 0.34 : 0.24)
+      ? scaledNameTargets(shape, width, height, preview ? 120 : 420, 0.48, preview ? 0.27 : 0.18)
       : [];
   }
 
@@ -158,9 +158,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     if (showName && gather > 0.05) {
       drawStyledName(ctx, name, cx, cy, {
         style,
-        size: Math.min(height * 0.2, width * 0.11),
+        size: Math.min(height * 0.15, width * 0.08),
         maxWidth: width * 0.78,
-        maxHeight: height * 0.26,
+        maxHeight: height * 0.2,
         minSize: 12,
         language,
         time,

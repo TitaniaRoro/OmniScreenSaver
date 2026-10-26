@@ -185,9 +185,9 @@ function createCanvasFallback(canvas, name, language, showName, preview) {
       const reveal = clamp(((time % 16) - 3) / 4.5, 0, 1);
       drawStyledName(ctx, name, width / 2, height * 0.5, {
         style,
-        size: Math.min(height * 0.2, width * 0.1),
+        size: Math.min(height * 0.15, width * 0.075),
         maxWidth: width * 0.66,
-        maxHeight: height * 0.22,
+        maxHeight: height * 0.16,
         minSize: 12,
         language,
         time,
@@ -258,10 +258,10 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
     if (showName) {
       textCtx.textAlign = "center";
       textCtx.textBaseline = "middle";
-      let fontSize = 140;
+      let fontSize = 105;
       textCtx.font = `${style.weight} ${fontSize}px ${style.family}`;
       let width2 = textCtx.measureText(name).width;
-      while (width2 > 940 && fontSize > 54) {
+      while (width2 > 940 && fontSize > 44) {
         fontSize -= 6;
         textCtx.font = `${style.weight} ${fontSize}px ${style.family}`;
         width2 = textCtx.measureText(name).width;
