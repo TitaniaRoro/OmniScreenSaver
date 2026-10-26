@@ -254,28 +254,38 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
     textCanvas.height = 256;
     textCtx = textCanvas.getContext("2d");
     const style = typeStyle("aurora");
-    if (showName) {
-      // Render the name through the same measurement + palette pipeline the
-      // Canvas fallback uses, so the WebGL curtain and the 2D aurora show the
-      // identical lettering (same tracking, size cap and colours).
+
+    // Render the name through the same measurement + palette pipeline the
+    // Canvas fallback uses, so the WebGL curtain and the 2D aurora show the
+    // identical lettering (same tracking, size cap and colours). The size is
+    // derived from the *current* viewport exactly like the fallback does —
+    // a fixed bake at init would make the two paths disagree after any resize.
+    let width = innerWidth || 1;
+    let height = innerHeight || 1;
+    function bakeNameTexture() {
+      textCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+      if (!showName) return;
       textCtx.textAlign = "center";
       textCtx.textBaseline = "middle";
-      const fontSize = nameSize(style, 1024 / 0.08 * 0.6, 256 / 0.15 * 0.6, { min: 44, max: 105 });
+      const fontSize = nameSize(style, width * 0.66, height * 0.16, { min: 12, max: 999 });
       const metrics = measureName(textCtx, name, style, fontSize, language);
       let cursor = 512 - metrics.total / 2;
-      const paint = textCtx.createLinearGradient(0, 60, 0, 200);
-      paint.addColorStop(0, rgba(style.palette.core, 0.98));
-      paint.addColorStop(0.5, rgba(style.palette.edge, 0.95));
-      paint.addColorStop(1, rgba(style.palette.accent, 0.96));
+      // Same aqua-to-violet sweep the Canvas fallback paints, so switching
+      // between the WebGL curtain and the 2D aurora never changes the letters.
+      const paint = textCtx.createLinearGradient(0, 128 - fontSize, 0, 128 + fontSize);
+      paint.addColorStop(0, "#8dffd8");
+      paint.addColorStop(0.5, "#f0fffa");
+      paint.addColorStop(1, "#c3a8ff");
       textCtx.font = `${style.weight} ${fontSize}px ${style.family}`;
       textCtx.shadowColor = style.palette.glow;
-      textCtx.shadowBlur = 16;
+      textCtx.shadowBlur = Math.max(6, fontSize * 0.24) * 1.2;
       textCtx.fillStyle = paint;
       for (let index = 0; index < metrics.clusters.length; index++) {
         textCtx.fillText(metrics.clusters[index], cursor + metrics.widths[index] / 2, 128);
         cursor += metrics.widths[index] + metrics.tracking;
       }
     }
+    bakeNameTexture();
 
     texture = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0);
@@ -298,9 +308,15 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
 
   function resize(w, h, ratio) {
     const pixelRatio = Math.min(2, Math.max(1, ratio || 1));
+    width = Math.max(1, w);
+    height = Math.max(1, h);
     canvas.width = Math.round(w * pixelRatio);
     canvas.height = Math.round(h * pixelRatio);
     gl.viewport(0, 0, canvas.width, canvas.height);
+    // Keep the curtain's lettering in step with the viewport so it always
+    // matches what nameSize() would give the Canvas fallback right now.
+    bakeNameTexture();
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
   }
 
   function frame(dt, time) {

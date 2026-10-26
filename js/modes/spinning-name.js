@@ -1,5 +1,5 @@
-import { setup2D, TAU, clamp, random, drawVignette } from "./common.js";
-import { typeStyle } from "./type-styles.js";
+import { nameSize, setup2D, TAU, clamp, random, drawVignette } from "./common.js";
+import { typeStyle, applyCase } from "./type-styles.js";
 import { splitGraphemes } from "../text.js";
 import { fbm3, noise2 } from "../motion.js";
 
