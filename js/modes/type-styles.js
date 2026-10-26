@@ -39,6 +39,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.3,
     slant: 0,
+    scale: 1,
     palette: { core: "#e6f4ff", edge: "#a8c6ff", glow: "#7fb2ff", accent: "#c9a8ff" },
     effects: ["glow", "widen"],
     reveal: "gather",
@@ -49,6 +50,7 @@ export const TYPE_STYLES = {
     weight: 700,
     tracking: 0.05,
     slant: -0.14,
+    scale: 1.1,
     palette: { core: "#1a0b2e", edge: "#ff7ae0", glow: "#c04bff", accent: "#6cf5e6" },
     effects: ["outlineNeon", "glow"],
     reveal: "trace",
@@ -59,6 +61,7 @@ export const TYPE_STYLES = {
     weight: 700,
     tracking: 0.16,
     slant: 0,
+    scale: 1,
     palette: { core: "#eafff9", edge: "#4fd8c6", glow: "#2fd3bd", accent: "#a99bff" },
     effects: ["chrome", "glow", "outlineThin"],
     reveal: "fill",
@@ -69,6 +72,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.22,
     slant: 0,
+    scale: 0.85,
     palette: { core: "#ffe9c4", edge: "#ffae63", glow: "#ff9836", accent: "#ffd9a1" },
     effects: ["lantern", "glow"],
     reveal: "lantern",
@@ -79,6 +83,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.02,
     slant: 0,
+    scale: 1,
     palette: { core: "#eafcff", edge: "#59e0ff", glow: "#3aa8ff", accent: "#b8f5ff" },
     effects: ["glow", "squash"],
     reveal: "bounce",
@@ -89,6 +94,7 @@ export const TYPE_STYLES = {
     weight: 700,
     tracking: 0.02,
     slant: 0,
+    scale: 1,
     palette: { core: "#f6fdff", edge: "#a8c8ff", glow: "#8b7bfa", accent: "#ffc6e9" },
     effects: ["perspective3d", "chrome", "bloom", "reflection"],
     reveal: "extrude",
@@ -99,6 +105,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.12,
     slant: 0,
+    scale: 1,
     palette: { core: "#d9ffe6", edge: "#39ff88", glow: "#22ff6a", accent: "#a9ffcd" },
     effects: ["glow", "glitch"],
     reveal: "resolve",
@@ -109,6 +116,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.02,
     slant: 0,
+    scale: 1,
     palette: { core: "#d3ffe7", edge: "#4ce8a0", glow: "#2ee88f", accent: "#b8ffd8" },
     effects: ["glow", "caret"],
     reveal: "type",
@@ -119,6 +127,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.06,
     slant: 0,
+    scale: 1,
     palette: { core: "#c4ffd9", edge: "#48ff9c", glow: "#2bff86", accent: "#8dffbe" },
     effects: ["glow", "cells"],
     reveal: "grow",
@@ -129,6 +138,7 @@ export const TYPE_STYLES = {
     weight: 700,
     tracking: 0.07,
     slant: 0,
+    scale: 0.8,
     palette: { core: "#fff6dc", edge: "#ffc061", glow: "#ff9b3d", accent: "#ff8fd8" },
     effects: ["glow", "sparkle"],
     reveal: "ignite",
@@ -139,6 +149,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.1,
     slant: 0,
+    scale: 1,
     palette: { core: "#f0fff8", edge: "#77f2cd", glow: "#48e6c0", accent: "#c1a8ff" },
     effects: ["glow", "sweep"],
     reveal: "sweep",
@@ -149,6 +160,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.03,
     slant: 0,
+    scale: 0.9,
     palette: { core: "#ffe9c2", edge: "#ff8a3a", glow: "#ff4d1c", accent: "#ffc25e" },
     effects: ["glow", "melt"],
     reveal: "melt",
@@ -159,6 +171,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.26,
     slant: 0,
+    scale: 1,
     palette: { core: "#eaf8ff", edge: "#6fd8ff", glow: "#49c6ff", accent: "#c7b4ff" },
     effects: ["glow", "widen"],
     reveal: "weave",
@@ -169,6 +182,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.34,
     slant: 0,
+    scale: 0.8,
     palette: { core: "#eef6ff", edge: "#a9c8ff", glow: "#7f9cff", accent: "#d6f2ff" },
     effects: ["stars", "glow"],
     reveal: "connect",
@@ -179,6 +193,7 @@ export const TYPE_STYLES = {
     weight: 900,
     tracking: 0.04,
     slant: -0.1,
+    scale: 0.93,
     palette: { core: "#fff8ea", edge: "#ff6fc8", glow: "#ff4fa8", accent: "#8ef4ff" },
     effects: ["chrome", "scanline", "glow"],
     reveal: "chrome",
@@ -189,6 +204,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.06,
     slant: 0,
+    scale: 0.5,
     palette: { core: "#f2f6ff", edge: "#b7c9ff", glow: "#8ea6ff", accent: "#ffe6b8" },
     effects: ["glow"],
     reveal: "flip",
@@ -199,6 +215,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.06,
     slant: 0,
+    scale: 1,
     palette: { core: "#c4ffd9", edge: "#48ff9c", glow: "#2bff86", accent: "#8dffbe" },
     effects: ["glow", "cells"],
     reveal: "blockBuild",
@@ -209,6 +226,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.06,
     slant: 0,
+    scale: 0.8,
     palette: { core: "#ffe9c6", edge: "#ffa855", glow: "#ff6a2a", accent: "#ffd79a" },
     effects: ["ember", "glow", "flicker"],
     reveal: "ember",
@@ -219,6 +237,7 @@ export const TYPE_STYLES = {
     weight: 400,
     tracking: 0.05,
     slant: 0,
+    scale: 0.53,
     // Daylight scene: the name is cut into bright wet sand as a soft shadowed
     // groove — warm sand tones, no neon glow (the old sunset-orange glow read
     // as unrelated to the pale sky-and-sand aesthetic).
@@ -243,7 +262,7 @@ export const TYPE_STYLES = {
     weight: 800,
     tracking: 0.06,
     slant: 0,
-    scale: 1,
+    scale: 1.47,
     palette: { core: "#eef2ff", edge: "#b9c6f2", glow: "#7d8cff", accent: "#ffffff" },
     effects: ["glow"],
     reveal: "crackFall",
@@ -271,6 +290,22 @@ export function typeStyle(modeId) {
 /** CSS font shorthand for a style at a given pixel size. */
 export function fontString(style, size) {
   return `${style.weight} ${size}px ${style.family}`;
+}
+
+/**
+ * Canonical name size for a viewport and type style.
+ *
+ * Every mode derives its lettering from this one formula: the style's `scale`
+ * metadata (default 1) multiplies the base proportions, so a world that wants
+ * heavier or lighter lettering declares it once in TYPE_STYLES instead of
+ * hardcoding its own fractions inside the draw loop. Modes with bespoke
+ * geometry (a sign panel, a cube face, a fixed-pixel buffer) pass their local
+ * box as `width`/`height`, which keeps the same clamped behaviour.
+ */
+export function nameSize(style, width, height, { min = 22, max = 110 } = {}) {
+  const scale = style.scale ?? 1;
+  const raw = Math.min(height * 0.15 * scale, width * 0.08 * scale);
+  return Math.max(min, Math.min(max, raw));
 }
 
 /** Latin-only uppercase; Bengali and other scripts are returned untouched. */

@@ -1,4 +1,4 @@
-import { setup2D, TAU, clamp, random, rgba, smoothstep, drawStyledName, drawVignette } from "./common.js";
+import { nameSize, setup2D, TAU, clamp, random, rgba, smoothstep, drawStyledName, drawVignette } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { scaledNameTargets } from "../name-shape.js";
 import { fbm3, noise2, damp } from "../motion.js";
@@ -129,7 +129,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     if (showName && gather > 0.12) {
       drawStyledName(ctx, name, width / 2, height / 2, {
         style,
-        size: Math.min(height * 0.135, width * 0.075),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.56,
         maxHeight: height * 0.15,
         minSize: 12,

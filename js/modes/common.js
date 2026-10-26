@@ -1,9 +1,18 @@
 import { splitGraphemes } from "../text.js";
-import { TYPE_STYLES, DEFAULT_TYPE_STYLE, typeStyle, applyCase } from "./type-styles.js";
+import { TYPE_STYLES, DEFAULT_TYPE_STYLE, typeStyle, applyCase, nameSize as canonicalNameSize } from "./type-styles.js";
 import { flicker, noise2 } from "../motion.js";
 
 export const TAU = Math.PI * 2;
 export { TYPE_STYLES, DEFAULT_TYPE_STYLE, typeStyle };
+
+/**
+ * Canonical name size for a viewport and type style (see type-styles.js).
+ * Re-exported here so every mode pulls lettering dimensions through the same
+ * shared helper instead of hardcoding per-mode fractions.
+ */
+export function nameSize(style, width, height, options = {}) {
+  return canonicalNameSize(style, width, height, options);
+}
 
 export const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 export const lerp = (a, b, t) => a + (b - a) * t;
