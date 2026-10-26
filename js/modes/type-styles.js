@@ -90,9 +90,9 @@ export const TYPE_STYLES = {
     tracking: 0.02,
     slant: 0,
     palette: { core: "#f6fdff", edge: "#a8c8ff", glow: "#8b7bfa", accent: "#ffc6e9" },
-    effects: ["extrude", "chrome", "glow"],
+    effects: ["perspective3d", "chrome", "bloom", "reflection"],
     reveal: "extrude",
-    note: "Solid extruded chrome turning in space."
+    note: "A real 3D particle cloud shaped from the name, lit and bloomed like chrome in space."
   },
   matrix: {
     family: FONTS.mono,

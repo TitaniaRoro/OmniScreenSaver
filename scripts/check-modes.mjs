@@ -48,7 +48,8 @@ for (const [name, stack] of Object.entries(FONTS)) {
 
 // No mode may draw the name with the old shared glow helper.
 for (const [file, source] of modeSources) {
-  if (!file.startsWith("js/modes/") || ["js/modes/common.js", "js/modes/fire.js", "js/modes/type-styles.js", "js/modes/index.js"].includes(file)) continue;
+  // Shared helper modules are not modes themselves and carry no type style.
+  if (!file.startsWith("js/modes/") || ["js/modes/common.js", "js/modes/fire.js", "js/modes/type-styles.js", "js/modes/index.js", "js/modes/isometric.js"].includes(file)) continue;
   assert.ok(!/\bdrawName\(/.test(source), `${file} should use drawStyledName with its own type style.`);
   assert.ok(/typeStyle\(/.test(source), `${file} should pull its type style from type-styles.js.`);
   assert.ok(/from "\.\.\/motion\.js"/.test(source), `${file} should build motion on ../motion.js.`);
