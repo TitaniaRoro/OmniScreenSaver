@@ -300,7 +300,7 @@ export function createMode({ canvas, name, language = "bn", showName, preview = 
    * The name: extruded letter slabs assembled out of the ground
    * ---------------------------------------------------------------- */
 
-  function drawName(time) {
+  function drawLetterSlabs(time) {
     if (!cells.length) return;
     const cycle = time % CYCLE;
     const buildIn = smoothstep(0.6, 5.2, cycle);
@@ -388,7 +388,7 @@ export function createMode({ canvas, name, language = "bn", showName, preview = 
     fire.drawGlow(ctx, { radius: Math.min(width, height) * 0.55, color: [255, 148, 66], strength: 0.6 });
     fire.draw(ctx, { smokeAlpha: 0.5 });
 
-    drawName(time);
+    drawLetterSlabs(time);
     drawFireflies(time, dt);
 
     // Rim light along the front edges of the diorama, from the fire
