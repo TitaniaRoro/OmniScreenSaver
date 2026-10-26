@@ -12,7 +12,7 @@ import { noise2, fbm3 } from "../motion.js";
  * nodes sit pinned on their strokes, lifting the terrain under them until the
  * contours crowd together and sketch the letters themselves.
  */
-export function createMode({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+function createCanvasRenderer({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
   const surface = setup2D(canvas, "#060b1c");
   const { ctx } = surface;
   const style = typeStyle("topology");

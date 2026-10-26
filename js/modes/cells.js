@@ -13,7 +13,7 @@ import { noise2 } from "../motion.js";
  * On the reveal beat some seeds are called onto the letterforms: the colony
  * briefly grows the name as living tissue before letting go.
  */
-export function createMode({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+function createCanvasRenderer({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
   const surface = setup2D(canvas, "#081410");
   const { ctx } = surface;
   const style = typeStyle("cells");

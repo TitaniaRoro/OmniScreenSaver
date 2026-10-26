@@ -7,5 +7,8 @@
   "scripts": {
     "check": "node scripts/check-modes.mjs && node --test tests/*.test.mjs"
   },
-  "license": "GPL-3.0-only"
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "three": "^0.170.0"
+  }
 }

@@ -12,7 +12,7 @@ import { fbm3, noise2 } from "../motion.js";
  * beat, marked particles on the rings peel off onto the letterforms: the name
  * is assembled *from* the halo, then released back into its orbit.
  */
-export function createMode({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+function createCanvasRenderer({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
   const surface = setup2D(canvas, "#0a0614");
   const { ctx } = surface;
   const style = typeStyle("halo");

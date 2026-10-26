@@ -12,7 +12,7 @@ import { fbm3, noise2 } from "../motion.js";
  * the vapour — dark letterforms edged with silver lining, then dissolve back
  * into the weather.
  */
-export function createMode({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+function createCanvasRenderer({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
   const surface = setup2D(canvas, "#0b1020");
   const { ctx } = surface;
   const style = typeStyle("clouds");

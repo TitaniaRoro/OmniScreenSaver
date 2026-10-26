@@ -12,7 +12,7 @@ import { noise2 } from "../motion.js";
  * so for a moment the wiring diagram *is* the lettering — before the pull lets
  * go and the net relaxes back into static snow.
  */
-export function createMode({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+function createCanvasRenderer({ canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
   const surface = setup2D(canvas, "#04070f");
   const { ctx } = surface;
   const style = typeStyle("net");
