@@ -17,7 +17,9 @@ const PROFILES = {
   clock:        { noise: .023, filter: 1300, filterType: "lowpass", tones: [110, 164.81], type: "sine", lfo: .02, cue: "clockTick", interval: 1 },
   campfire:     { noise: .12, filter: 870, filterType: "bandpass", tones: [55, 82.41], type: "sine", lfo: .035, cue: "crackle", interval: 3.7 },
   beach:        { noise: .11, filter: 740, filterType: "lowpass", tones: [65.41, 98], type: "sine", lfo: .025, cue: "wave", interval: 6.5 },
-  layered:      { noise: .09, filter: 620, filterType: "bandpass", tones: [65.41, 98, 130.81], type: "sine", lfo: .05, cue: "crackle", interval: 4.6 }
+  layered:      { noise: .09, filter: 620, filterType: "bandpass", tones: [65.41, 98, 130.81], type: "sine", lfo: .05, cue: "crackle", interval: 4.6 },
+  shatter:      { noise: .02, filter: 1600, filterType: "highpass", tones: [98, 146.83, 220], type: "sine", lfo: .05, cue: "glassBreak", interval: 12 },
+  cube:         { noise: .028, filter: 420, filterType: "lowpass", tones: [73.42, 110, 146.83], type: "triangle", lfo: .07, cue: "cubeBounce", interval: 5.5 }
 };
 
 function createNoiseBuffer(context) {
@@ -96,6 +98,16 @@ export function createAmbientScene(sceneId, context, destination) {
       case "keyboard": playTone(510 + Math.random() * 170, 450, .045, .003, "sine"); break;
       case "clockTick": playTone(920, 680, .06, .0035, "sine"); break;
       case "pixelChime": playTone(440, 392, .7, .007, "triangle"); break;
+      case "glassBreak": {
+        // Soft glass chime: a bright filtered noise spray plus three high
+        // ring-down tones, kept well below the master limiter threshold.
+        playNoise(.5, .014, 3200, "highpass");
+        playTone(1760, 1240, .5, .006, "sine");
+        playTone(2210, 1660, .42, .0045, "sine", .05);
+        playTone(2630, 1980, .34, .0035, "sine", .11);
+        break;
+      }
+      case "cubeBounce": playTone(196, 110, .3, .012, "triangle"); playTone(784, 588, .18, .004, "sine", .02); break;
       default: playTone(440, 392, .7, .006); break;
     }
   }
