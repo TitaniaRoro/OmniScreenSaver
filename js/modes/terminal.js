@@ -1,4 +1,4 @@
-import { setup2D, clamp, roundedRect, drawScanlines, drawVignette, measureName } from "./common.js";
+import { setup2D, clamp, nameSize, roundedRect, drawScanlines, drawVignette, measureName } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { splitGraphemes } from "../text.js";
 import { noise2, flicker } from "../motion.js";
@@ -108,8 +108,11 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
     const nameStart = lines.length * 2.6 + 0.8;
     if (showName && cycle > nameStart) {
       const progress = clamp((cycle - nameStart) / 2.6, 0, 1);
-      const metrics = measureName(ctx, name, style, Math.min(panelH * 0.2, panelW * 0.09), language);
-      const size = metrics ? Math.min(panelH * 0.15, panelW * 0.07) : 60;
+      // One canonical size for the panel box (see type-styles.js): measure and
+      // draw share it so the typed-out clusters sit exactly where they were
+      // measured, instead of a second hardcoded fraction drifting from it.
+      const size = nameSize(style, panelW * 0.84, panelH, { min: 20, max: 72 });
+      const metrics = measureName(ctx, name, style, size, language);
       const revealGraphemes = metrics.clusters.length;
       const typedCount = Math.ceil(progress * revealGraphemes * 1.25);
 

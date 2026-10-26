@@ -1,4 +1,4 @@
-import { setup2D, TAU, clamp, random, drawStyledName, drawVignette } from "./common.js";
+import { nameSize, setup2D, TAU, clamp, random, drawStyledName, drawVignette } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { noise2, fbm3, Spring } from "../motion.js";
 
@@ -55,7 +55,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
   function frame(dt, time) {
     const step = Math.min(dt, 1 / 30);
     const text = label();
-    const size = clamp(Math.min(width * 0.1, height * 0.15), 22, 110);
+    const size = nameSize(style, width, height);
     ctx.font = `${style.weight} ${size}px ${style.family}`;
     const textWidth = ctx.measureText(text).width + (style.tracking || 0) * size * text.length;
     const radiusX = textWidth / 2 + size * 0.22;

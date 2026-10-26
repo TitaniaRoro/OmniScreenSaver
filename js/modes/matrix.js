@@ -1,4 +1,4 @@
-import { setup2D, clamp, random, drawVignette, measureName } from "./common.js";
+import { nameSize, setup2D, clamp, random, drawVignette, measureName } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { splitGraphemes } from "../text.js";
 import { noise2 } from "../motion.js";
@@ -102,7 +102,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
         ctx.fillRect(0, height * 0.38, width, height * 0.24);
         ctx.restore();
 
-        const size = Math.min(height * 0.15, width * 0.075);
+        const size = nameSize(style, width, height);
         const metrics = measureName(ctx, name, style, size, language);
         ctx.save();
         ctx.textAlign = "center";

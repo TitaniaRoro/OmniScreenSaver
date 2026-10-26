@@ -1,4 +1,4 @@
-import {
+import { nameSize,
   setup2D, TAU, clamp, rgba,
   drawStyledName, drawScanlines, drawVignette, makeStarField, drawTwinklingStars
 } from "./common.js";
@@ -163,7 +163,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
 
     if (showName) {
       const y = Math.min(height * 0.36, horizon - height * 0.06);
-      const size = Math.min(height * 0.14, width * 0.075);
+      const size = nameSize(style, width, height);
       // Reflection on the floor
       ctx.save();
       ctx.globalAlpha = 0.2;

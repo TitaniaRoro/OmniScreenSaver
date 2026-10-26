@@ -1,4 +1,4 @@
-import { setup2D, TAU, clamp, random, measureName, rgba, drawVignette } from "./common.js";
+import { nameSize, setup2D, TAU, clamp, random, measureName, rgba, drawVignette } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { fbm2, noise2 } from "../motion.js";
 
@@ -49,7 +49,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
     reformCueAt = -1;
     const text = showName ? name : "✦ ✧ ✦";
     const pad = 26;
-    const size = clamp(Math.min(height * 0.22, width * 0.44), 22, 110);
+    const size = nameSize(style, width, height);
     bctx.font = `${style.weight} ${size}px ${style.family}`;
     const metrics = measureName(bctx, text, style, size, language);
     const bw = Math.max(1, Math.ceil(metrics.total + pad * 2));
@@ -213,7 +213,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
     const reforming = elapsed > FALL ? clamp((elapsed - FALL) / REFORM, 0, 1) : 0;
     const glowPulse = 0.85 + 0.15 * Math.sin(time * 1.1);
     const text = showName ? name : "✦ ✧ ✦";
-    const size = clamp(Math.min(height * 0.22, width * 0.44), 22, 110);
+    const size = nameSize(style, width, height);
     const metrics = measureName(ctx, text, style, size, language);
     const startX = (width - metrics.total) / 2;
 

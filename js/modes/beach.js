@@ -1,4 +1,4 @@
-import {
+import { nameSize,
   setup2D, TAU, clamp, lerp, smoothstep, rgba,
   drawStyledName, drawGlowDot, drawVignette, makeStarField, drawTwinklingStars
 } from "./common.js";
@@ -214,7 +214,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
       const nameY = height * (preview ? 0.88 : 0.9);
       drawStyledName(ctx, name, width / 2, nameY, {
         style,
-        size: Math.min(height * 0.08, width * 0.07),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.68,
         maxHeight: height * 0.08,
         minSize: 10,
@@ -244,7 +244,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
       // Wet highlight along the top of each carved letter
       drawStyledName(ctx, name, width / 2, nameY - Math.max(1, height * 0.004), {
         style,
-        size: Math.min(height * 0.08, width * 0.07),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.68,
         maxHeight: height * 0.08,
         minSize: 10,
