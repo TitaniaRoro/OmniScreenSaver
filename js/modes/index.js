@@ -40,7 +40,10 @@ export const MODES = [
   { id: "clock", nameKey: "modeClock", descriptionKey: "descClock", icon: "◷", art: "clock", category: "calm", create: createClock },
   { id: "campfire", nameKey: "modeCampfire", descriptionKey: "descCampfire", icon: "♨", art: "campfire", category: "campfire", create: createCampfire },
   { id: "beach", nameKey: "modeBeach", descriptionKey: "descBeach", icon: "☾", art: "beach", category: "campfire", create: createBeach },
-  { id: "layered", nameKey: "modeLayered", descriptionKey: "descLayered", icon: "◭", art: "layered", category: "campfire", create: createLayered }
+  { id: "pixel", nameKey: "modePixel", descriptionKey: "descPixel", icon: "🏕", art: "pixel", category: "campfire", create: createPixel },
+  { id: "layered", nameKey: "modeLayered", descriptionKey: "descLayered", icon: "◭", art: "layered", category: "campfire", create: createLayered },
+  { id: "shatter", nameKey: "modeShatter", descriptionKey: "descShatter", icon: "❈", art: "shatter", category: "geometry", create: createShatter },
+  { id: "cube", nameKey: "modeCube", descriptionKey: "descCube", icon: "⬢", art: "cube", category: "geometry", create: createCube }
 ];
 
 export const MODES_BY_ID = new Map(MODES.map(mode => [mode.id, mode]));

@@ -4,7 +4,7 @@ import { execFileSync } from "node:child_process";
 import { MODES } from "../js/modes/index.js";
 import { TYPE_STYLES, FONTS } from "../js/modes/type-styles.js";
 
-assert.equal(MODES.length, 19, "The gallery should contain all 19 planned modes.");
+assert.equal(MODES.length, 22, "The gallery should contain all 22 planned modes.");
 assert.equal(new Set(MODES.map(mode => mode.id)).size, MODES.length, "Mode ids should be unique.");
 
 const modeSources = new Map();
