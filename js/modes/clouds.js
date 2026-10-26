@@ -1,3 +1,5 @@
+import { makeNameTexture, hexToRgb } from "./three-world.js";
+import { withThreeUpgrade } from "./three-helpers.js";
 import { setup2D, clamp, random, smoothstep, rgba, drawStyledName } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { scaledNameTargets } from "../name-shape.js";
@@ -137,4 +139,193 @@ function createCanvasRenderer({ canvas, name, shape, language = "en", showName, 
   }
 
   return { resize, frame, destroy() {} };
+}
+
+/**
+ * The WebGL reading of the world: a full-screen quad raymarches a 3D fBm
+ * cloud volume — real volumetric depth, moonlight from above, lightning
+ * flashes inside the mass. During the reveal the name is sampled from its
+ * rendered lettering and condenses out of the vapour as dark glyphs lined
+ * with silver, exactly like the canvas fallback's choreography.
+ */
+function createThreeRenderer(THREE, { canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+  const style = typeStyle("clouds");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false });
+  renderer.setClearColor(new THREE.Color("#0b1020"), 1);
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+  let nameTexture = null;
+  if (showName && name) {
+    const textureCanvas = makeNameTexture({ name, style, language, width: 1024, height: 256 });
+    if (textureCanvas) {
+      nameTexture = new THREE.CanvasTexture(textureCanvas);
+      nameTexture.flipY = false;
+    }
+  }
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uGather: { value: 0 },
+    uFlash: { value: 0 },
+    uAspect: { value: 1 },
+    uQuality: { value: preview ? 5 : 9 },
+    uNameTex: { value: nameTexture },
+    uHasName: { value: nameTexture ? 1 : 0 },
+    uSkyTop: { value: new THREE.Color(...hexToRgb("#1a2440")) },
+    uSkyBottom: { value: new THREE.Color(...hexToRgb("#0b1020")) },
+    uCloudLit: { value: new THREE.Color(...hexToRgb(style.palette.accent)) },
+    uCloudDark: { value: new THREE.Color(...hexToRgb("#232c48")) },
+    uRim: { value: new THREE.Color(...hexToRgb(style.palette.core)) }
+  };
+
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position.xy, 0.0, 1.0);
+      }
+    `,
+    fragmentShader: `
+      precision highp float;
+      uniform float uTime;
+      uniform float uGather;
+      uniform float uFlash;
+      uniform float uAspect;
+      uniform int uQuality;
+      uniform float uHasName;
+      uniform sampler2D uNameTex;
+      uniform vec3 uSkyTop;
+      uniform vec3 uSkyBottom;
+      uniform vec3 uCloudLit;
+      uniform vec3 uCloudDark;
+      uniform vec3 uRim;
+      varying vec2 vUv;
+
+      float hash(vec2 p) {
+        p = fract(p * vec2(127.1, 311.7));
+        p += dot(p, p + 34.56);
+        return fract(p.x * p.y);
+      }
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1, 0)), u.x),
+                   mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), u.x), u.y);
+      }
+      float fbm(vec2 p) {
+        float v = 0.0;
+        float a = 0.5;
+        for (int i = 0; i < 5; i++) {
+          v += a * noise(p);
+          p = p * 2.03 + vec2(1.3, 7.7);
+          a *= 0.5;
+        }
+        return v;
+      }
+      // 3D density from stacked warped 2D fBm slices — cheap volumetrics.
+      float density(vec3 p) {
+        float base = fbm(p.xy * 1.4 + p.z * 0.35);
+        float detail = fbm(p.xy * 3.1 - p.z * 0.6);
+        float d = base * 0.75 + detail * 0.35;
+        d -= p.z * 0.45; // thin out with distance
+        return clamp(d - 0.32, 0.0, 1.0);
+      }
+      void main() {
+        vec2 uv = vUv;
+        vec2 p = (uv - 0.5) * vec2(uAspect, 1.0);
+        float drift = uTime * 0.02;
+        vec3 col = mix(uSkyBottom, uSkyTop, smoothstep(0.0, 1.0, uv.y));
+
+        // Raymarch the cloud slab front-to-back.
+        float t = 0.0;
+        float acc = 0.0;
+        float lightAcc = 0.0;
+        int steps = uQuality;
+        for (int i = 0; i < 9; i++) {
+          if (i >= steps) break;
+          vec3 q = vec3(p * (1.6 + t * 0.5), t * 0.9 + drift * 6.0);
+          q.x += sin(uTime * 0.05 + q.y * 0.8) * 0.25; // wind shear
+          float d = density(q);
+          if (d > 0.001) {
+            // Sample toward the hidden moon for self-lighting.
+            float lit = density(q + vec3(0.28, 0.42, 0.25));
+            float shade = clamp((d - lit) * 2.4, -1.0, 1.0);
+            acc += d * (1.0 - acc) * 0.24;
+            lightAcc += shade * d * 0.2;
+          }
+          t += 0.11;
+        }
+        vec3 cloudCol = mix(uCloudDark, uCloudLit, clamp(lightAcc * 1.6 + 0.35, 0.0, 1.0));
+        cloudCol += uRim * pow(clamp(lightAcc, 0.0, 1.0), 3.0) * 0.6;
+        cloudCol += vec3(0.9, 0.95, 1.0) * uFlash * acc; // lightning illuminates the mass
+        col = mix(col, cloudCol, clamp(acc, 0.0, 1.0));
+
+        // Condense the name out of the vapour.
+        if (uHasName > 0.5 && uGather > 0.001) {
+          vec2 nameUv = vec2((uv.x - 0.5) * 1.0 + 0.5, uv.y);
+          vec2 centered = vec2((uv.x - 0.5) * uAspect, uv.y - 0.5);
+          vec2 texUv = centered / vec2(11.0 * 0.09 * uAspect, 0.28) * 0.5 + 0.5;
+          if (abs(centered.x) < 5.5 * 0.09 * uAspect && abs(centered.y) < 0.14) {
+            float mask = texture2D(uNameTex, texUv).a;
+            float wobble = (fbm(p * 6.0 + uTime * 0.4) - 0.5) * 0.02;
+            float edge = texture2D(uNameTex, texUv + vec2(wobble + 0.004, 0.0)).a;
+            float rim = clamp(edge - mask, 0.0, 1.0);
+            float presence = mask * uGather;
+            col = mix(col, uCloudDark * 0.55, presence * 0.85);
+            col += uRim * rim * uGather * 1.2; // silver lining
+          }
+        }
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `
+  });
+
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 4), material);
+  scene.add(quad);
+
+  let lastCue = 0;
+  let lastFlash = -12;
+  let flashEnergy = 0;
+
+  function resize(w, h, ratio) {
+    renderer.setPixelRatio(Math.min(ratio || 1, preview ? 1 : 1.5));
+    renderer.setSize(w, h, false);
+    uniforms.uAspect.value = w / h;
+  }
+
+  function frame(dt, time) {
+    const cycle = time % 19;
+    const gather = showName ? smoothstep(4, 7.5, cycle) * (1 - smoothstep(14, 17, cycle)) : 0;
+    if (time - lastFlash > random(7, 13)) {
+      lastFlash = time;
+      flashEnergy = 1;
+    }
+    flashEnergy = Math.max(0, flashEnergy - dt * 2.4);
+    uniforms.uTime.value = time;
+    uniforms.uGather.value = gather;
+    uniforms.uFlash.value = flashEnergy * flashEnergy;
+    renderer.render(scene, camera);
+    if (flashEnergy > 0.9) emitSound("thunder");
+    if (showName && gather > 0.6 && time - lastCue > 6) {
+      lastCue = time;
+      emitSound("windChime");
+    }
+  }
+
+  function destroy() {
+    nameTexture?.dispose();
+    quad.geometry.dispose();
+    material.dispose();
+    renderer.dispose();
+  }
+
+  return { resize, frame, destroy, three: true };
+}
+
+export function createMode(options) {
+  return withThreeUpgrade(options, () => createCanvasRenderer(options), THREE => createThreeRenderer(THREE, options));
 }

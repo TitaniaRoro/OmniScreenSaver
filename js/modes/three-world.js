@@ -22,7 +22,7 @@ let threePromise = null;
 /** Lazily load three.js once; resolves null when the import fails. */
 export function loadThree() {
   if (!threePromise) {
-    threePromise = import("three").catch(() => null);
+    threePromise = import("../vendor/three.module.js").catch(() => null);
   }
   return threePromise;
 }

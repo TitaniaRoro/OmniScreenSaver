@@ -1,3 +1,5 @@
+import { makeNameTexture, hexToRgb } from "./three-world.js";
+import { withThreeUpgrade } from "./three-helpers.js";
 import { setup2D, clamp, random, smoothstep, rgba, drawStyledName } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { scaledNameTargets } from "../name-shape.js";
@@ -178,4 +180,163 @@ function createCanvasRenderer({ canvas, name, shape, language = "en", showName, 
   }
 
   return { resize, frame, destroy() {} };
+}
+
+/**
+ * The WebGL reading of the world: a gently tilted plane in perspective space
+ * whose fragment shader computes animated 3D Worley cells entirely on the GPU
+ * (seed points wander through a slab of depth, so the membranes parallax as
+ * the camera drifts). During the reveal the name is sampled from its rendered
+ * lettering and the colony grows it as living tissue — seeds inside the glyph
+ * mask glow brighter, exactly like the canvas fallback's choreography.
+ */
+function createThreeRenderer(THREE, { canvas, name, shape, language = "en", showName, emitSound = () => {}, preview = false }) {
+  const style = typeStyle("cells");
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !preview, alpha: false });
+  renderer.setClearColor(new THREE.Color("#081410"), 1);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+  camera.position.z = 7;
+
+  let nameTexture = null;
+  if (showName && name) {
+    const textureCanvas = makeNameTexture({ name, style, language, width: 1024, height: 256 });
+    if (textureCanvas) {
+      nameTexture = new THREE.CanvasTexture(textureCanvas);
+      nameTexture.flipY = false;
+    }
+  }
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uGather: { value: 0 },
+    uAspect: { value: 1 },
+    uNameTex: { value: nameTexture },
+    uHasName: { value: nameTexture ? 1 : 0 },
+    uCellScale: { value: 3.2 },
+    uCore: { value: new THREE.Color(...hexToRgb(style.palette.core)) },
+    uEdge: { value: new THREE.Color(...hexToRgb(style.palette.edge)) },
+    uGlow: { value: new THREE.Color(...hexToRgb(style.palette.glow)) },
+    uBg: { value: new THREE.Color("#081410") }
+  };
+
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      precision highp float;
+      uniform float uTime;
+      uniform float uGather;
+      uniform float uAspect;
+      uniform float uHasName;
+      uniform float uCellScale;
+      uniform sampler2D uNameTex;
+      uniform vec3 uCore;
+      uniform vec3 uEdge;
+      uniform vec3 uGlow;
+      uniform vec3 uBg;
+      varying vec2 vUv;
+
+      vec2 hash2(vec2 p, float z) {
+        p = fract(p * vec2(123.34, 456.21) + z * 78.233);
+        p += dot(p, p + 45.32);
+        return fract(vec2(p.x * p.y * 17.43, p.x + p.y * 9.17));
+      }
+      // 3-cell Worley over a shallow depth slab for parallax membranes.
+      void worley(vec2 p, float time, out float f1, out float f2) {
+        vec2 g = floor(p);
+        vec2 f = fract(p);
+        float best = 8.0;
+        float second = 8.0;
+        for (int y = -1; y <= 1; y++) {
+          for (int x = -1; x <= 1; x++) {
+            vec2 offset = vec2(float(x), float(y));
+            vec2 cell = g + offset;
+            vec2 seed = hash2(cell, 0.0);
+            vec2 seed2 = hash2(cell, 3.7);
+            vec2 point = offset + 0.5 + 0.4 * sin(time * 0.6 + 6.2831 * seed + seed2 * 3.0);
+            float d = length(f - point);
+            if (d < best) { second = best; best = d; }
+            else if (d < second) { second = d; }
+          }
+        }
+        f1 = best;
+        f2 = second;
+      }
+      void main() {
+        vec2 p = (vUv - 0.5) * vec2(uAspect, 1.0);
+        float f1, f2;
+        worley(p * uCellScale * 2.2, uTime, f1, f2);
+        float membrane = smoothstep(0.0, 0.06, f2 - f1);
+        float nucleus = smoothstep(0.22, 0.0, f1);
+
+        vec3 col = uBg;
+        col += uEdge * (1.0 - membrane) * 0.5;             // glowing walls
+        col += uGlow * nucleus * 0.35;                     // soft interiors
+        col += uCore * pow(nucleus, 3.0) * 0.5;            // bright hearts
+        float breathe = 0.85 + 0.15 * sin(uTime * 0.7 + f1 * 9.0);
+        col *= breathe;
+
+        if (uHasName > 0.5 && uGather > 0.001) {
+          vec2 texUv = vec2(vUv.x, 1.0 - vUv.y);
+          float mask = texture2D(uNameTex, texUv).a;
+          // Inside the glyphs the colony blooms: membranes thicken, hearts ignite.
+          col = mix(col, col * 1.9 + uCore * mask * 0.5 * uGather, mask * uGather);
+          col += uEdge * mask * uGather * (1.0 - membrane) * 1.4;
+        }
+        float vignette = smoothstep(1.1, 0.35, length(p));
+        col *= 0.55 + 0.45 * vignette;
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `
+  });
+
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(11, 7.4), material);
+  quad.rotation.x = -0.28;
+  scene.add(quad);
+
+  let lastCue = 0;
+
+  function resize(w, h, ratio) {
+    renderer.setPixelRatio(Math.min(ratio || 1, preview ? 1 : 2));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    uniforms.uAspect.value = Math.max(w / h, 1) * 1.15;
+  }
+
+  function frame(dt, time) {
+    const cycle = time % 18;
+    const gather = showName ? smoothstep(3.5, 7, cycle) * (1 - smoothstep(13.5, 16.5, cycle)) : 0;
+    uniforms.uTime.value = time;
+    uniforms.uGather.value = gather;
+    quad.rotation.z = Math.sin(time * 0.05) * 0.06;
+    camera.position.x = Math.sin(time * 0.07) * 1.1;
+    camera.position.y = Math.cos(time * 0.05) * 0.6 + 0.4;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+    if (showName && gather > 0.6 && time - lastCue > 6) {
+      lastCue = time;
+      emitSound("softPulse");
+    }
+  }
+
+  function destroy() {
+    nameTexture?.dispose();
+    quad.geometry.dispose();
+    material.dispose();
+    renderer.dispose();
+  }
+
+  return { resize, frame, destroy, three: true };
+}
+
+export function createMode(options) {
+  return withThreeUpgrade(options, () => createCanvasRenderer(options), THREE => createThreeRenderer(THREE, options));
 }
