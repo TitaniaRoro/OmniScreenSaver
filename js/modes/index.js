@@ -20,6 +20,11 @@ import { createMode as createPixel } from "./pixel.js";
 import { createMode as createLayered } from "./layered-camp.js";
 import { createMode as createShatter } from "./shatter.js";
 import { createMode as createCube } from "./bouncing-cube.js";
+import { createMode as createTopology } from "./topology.js";
+import { createMode as createNet } from "./net.js";
+import { createMode as createHalo } from "./halo.js";
+import { createMode as createClouds } from "./clouds.js";
+import { createMode as createCells } from "./cells.js";
 
 export const MODES = [
   { id: "starfield", nameKey: "modeStarfield", descriptionKey: "descStarfield", icon: "✧", art: "starfield", category: "cosmic", create: createStarfield },
@@ -43,7 +48,12 @@ export const MODES = [
   { id: "pixel", nameKey: "modePixel", descriptionKey: "descPixel", icon: "🏕", art: "pixel", category: "campfire", create: createPixel },
   { id: "layered", nameKey: "modeLayered", descriptionKey: "descLayered", icon: "◭", art: "layered", category: "campfire", create: createLayered },
   { id: "shatter", nameKey: "modeShatter", descriptionKey: "descShatter", icon: "❈", art: "shatter", category: "geometry", create: createShatter },
-  { id: "cube", nameKey: "modeCube", descriptionKey: "descCube", icon: "⬢", art: "cube", category: "geometry", create: createCube }
+  { id: "cube", nameKey: "modeCube", descriptionKey: "descCube", icon: "⬢", art: "cube", category: "geometry", create: createCube },
+  { id: "topology", nameKey: "modeTopology", descriptionKey: "descTopology", icon: "◫", art: "topology", category: "geometry", create: createTopology },
+  { id: "net", nameKey: "modeNet", descriptionKey: "descNet", icon: "⧉", art: "net", category: "digital", create: createNet },
+  { id: "halo", nameKey: "modeHalo", descriptionKey: "descHalo", icon: "◎", art: "halo", category: "light", create: createHalo },
+  { id: "clouds", nameKey: "modeClouds", descriptionKey: "descClouds", icon: "☁", art: "clouds", category: "nature", create: createClouds },
+  { id: "cells", nameKey: "modeCells", descriptionKey: "descCells", icon: "◌", art: "cells", category: "nature", create: createCells }
 ];
 
 export const MODES_BY_ID = new Map(MODES.map(mode => [mode.id, mode]));

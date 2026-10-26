@@ -6,7 +6,7 @@ Build OmniScreenSaver as a static, browser-based screensaver-style web page for 
 
 ## Requirements
 
-- At least 13 visual modes; the current set contains 22, including three campfire scenes and two premium 3D effects.
+- At least 13 visual modes; the current set contains 27, including three campfire scenes, two premium 3D effects, and five Vanta-inspired worlds.
 - Every gallery tile is a live animation, not a still thumbnail. Only visible/near-visible previews render, and offscreen previews are torn down to protect battery and GPU time.
 - Endless animation loop, responsive canvas rendering, and best-effort fullscreen support.
 - Each mode has its own name typeface, color/effect treatment, and reveal choreography; new fonts are self-hosted with Bengali-capable fallbacks.
@@ -53,6 +53,11 @@ Build OmniScreenSaver as a static, browser-based screensaver-style web page for 
 20. Shattering Name
 21. Layered Camp 3D
 22. Isometric Cube
+23. Topology Mesh
+24. Neural Network
+25. Halo Rings
+26. Storm Clouds
+27. Living Cells
 
 A Shuffle option rotates through modes at the selected interval.
 
@@ -73,4 +78,4 @@ A Shuffle option rotates through modes at the selected interval.
 
 ## Status
 
-The complete 22-mode static site is implemented on the Arena working branch. All gallery previews are animated and viewport-budgeted; each world has its own type treatment and reveal, and the three fire scenes share a combustion particle model. JavaScript syntax/mode checks, Bengali grapheme/calendar tests, translation-key checks, font-file checks, and Canvas rendering smoke tests pass. A live static preview is available in the workspace. GitHub Pages remains disabled; the README Play link becomes live after deployment and explicit approval.
+The complete 27-mode static site is implemented on the Arena working branch. All gallery previews are animated and viewport-budgeted; each world has its own type treatment and reveal, and the three fire scenes share a combustion particle model. JavaScript syntax/mode checks, Bengali grapheme/calendar tests, translation-key checks, font-file checks, and Canvas rendering smoke tests pass. A live static preview is available in the workspace. GitHub Pages remains disabled; the README Play link becomes live after deployment and explicit approval.

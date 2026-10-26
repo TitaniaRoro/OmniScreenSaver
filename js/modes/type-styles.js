@@ -278,6 +278,61 @@ export const TYPE_STYLES = {
     effects: ["outlineThin", "glow"],
     reveal: "stampIn",
     note: "Chunky arcade capitals stamped onto the faces of a bouncing voxel cube."
+  },
+  topology: {
+    family: FONTS.tech,
+    weight: 700,
+    tracking: 0.14,
+    slant: 0,
+    scale: 1,
+    palette: { core: "#d8f4ff", edge: "#48d6ff", glow: "#2fb9ff", accent: "#b58cff" },
+    effects: ["outlineThin", "glow"],
+    reveal: "contourRise",
+    note: "Survey-map capitals that the contour lines climb toward and crowd around."
+  },
+  net: {
+    family: FONTS.mono,
+    weight: 400,
+    tracking: 0.2,
+    slant: 0,
+    scale: 0.95,
+    palette: { core: "#dff6ff", edge: "#5fd8ff", glow: "#3aa8ff", accent: "#aef0ff" },
+    effects: ["glow", "chromatic"],
+    reveal: "wireUp",
+    note: "Wiring-diagram lettering signalled into place by travelling pulses."
+  },
+  halo: {
+    family: FONTS.display,
+    weight: 700,
+    tracking: 0.1,
+    slant: 0,
+    scale: 1.08,
+    palette: { core: "#ffeaf9", edge: "#ff7ad9", glow: "#8f7bff", accent: "#5fd8ff" },
+    effects: ["glow", "outlineNeon"],
+    reveal: "orbitPeel",
+    note: "Soft neon lettering peeled off the orbiting rings of light."
+  },
+  clouds: {
+    family: FONTS.serif,
+    weight: 400,
+    tracking: 0.08,
+    slant: 0,
+    scale: 1.12,
+    palette: { core: "#e8eefc", edge: "#aebfe8", glow: "#8fa4d8", accent: "#ffffff" },
+    effects: ["glow", "outlineThin"],
+    reveal: "condense",
+    note: "Silver-lined serif lettering condensed straight out of the vapour."
+  },
+  cells: {
+    family: FONTS.display,
+    weight: 700,
+    tracking: 0.06,
+    slant: 0,
+    scale: 1,
+    palette: { core: "#d9ffe9", edge: "#48ffab", glow: "#2bd88a", accent: "#a8ffdc" },
+    effects: ["glow", "cells"],
+    reveal: "colonise",
+    note: "Rounded organic lettering grown as living tissue by the colony."
   }
 };
 

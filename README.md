@@ -18,7 +18,7 @@
 
 ![Status: in development](https://img.shields.io/badge/status-in%20development-f0a44b?style=for-the-badge)
 ![Languages: English and Bengali](https://img.shields.io/badge/languages-English%20%2B%20বাংলা-269b8f?style=for-the-badge)
-![Animated worlds: 19](https://img.shields.io/badge/animated%20worlds-19-7965d8?style=for-the-badge)
+![Animated worlds: 27](https://img.shields.io/badge/animated%20worlds-27-7965d8?style=for-the-badge)
 ![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-3b82f6?style=for-the-badge)
 
 </div>
@@ -31,22 +31,22 @@
 
 OmniScreenSaver is a lightweight **web page—not a native app**—that transforms a display into a looping world of color, light, and motion. Choose a name, choose a scene, and watch that name become part of the animation rather than sit on top of it.
 
-The interface is available in **English and বাংলা (Bengali)**, with a customizable name and 22 visual modes designed to run fullscreen in a modern browser.
+The interface is available in **English and বাংলা (Bengali)**, with a customizable name and 27 visual modes designed to run fullscreen in a modern browser.
 
 ### The experience
 
 - **Your name belongs in the scene.** It can gather from stardust, glow in falling rain, ripple across sand, or rise from campfire embers.
 - **Ambient sound in every mode.** Each scene has a gentle soundscape, with a master **sound on/off** switch and **volume control**. The audio is soft and atmospheric.
-- **No still mode cards.** All 22 gallery tiles are live animated previews; only tiles in or near the viewport render, so the rest of the page stays light on battery and mobile GPUs.
+- **No still mode cards.** All 27 gallery tiles are live animated previews; only tiles in or near the viewport render, so the rest of the page stays light on battery and mobile GPUs.
 - **Made to loop.** The worlds use naturalistic drift, flow fields, springs, buoyancy, drag, turbulence, and layered water motion rather than repetitive, mechanical oscillation.
 - **Fire that behaves like fire.** The bonfires use hot-gas buoyancy, turbulent flame, cooling embers, drifting smoke, and firelight that flickers across logs and the surrounding scene.
 - **A type style for every world.** Each animation has its own face and name choreography: ember-lit serif, pixel lettering, terminal mono, chrome tech, star-chart lettering, and more. Fonts are self-hosted, with Bengali-capable fallbacks.
 - **Simple exit behavior.** Mouse movement reveals the close control without stopping the animation; a close-button click, touch, or key press exits the screensaver.
 - **English + বাংলা.** The interface supports both languages, including Bengali names and text.
 
-## 🎨 The 22 worlds
+## 🎨 The 27 worlds
 
-The gallery contains **22 visual modes**. Each mode has its own ambient sound profile and a visual treatment that weaves your name into the scene.
+The gallery contains **27 visual modes**. Each mode has its own ambient sound profile and a visual treatment that weaves your name into the scene.
 
 | World | What to expect |
 |---|---|
@@ -69,6 +69,11 @@ The gallery contains **22 visual modes**. Each mode has its own ambient sound pr
 | 🔥 **Campfire Night** | Firelight, pine silhouettes, and sparks that gather into your name. |
 | 🌊 **Beach Bonfire** | A moonlit shore where waves gently wash your name from the sand. |
 | 🏕️ **Pixel Campfire** | A cozy, retro pixel-art campsite with ember-lit lettering. |
+| 🗺️ **Topology Mesh** | Living contour lines rise into hills and sketch your name in the terrain. |
+| 🧠 **Neural Network** | Signals cross a drifting mesh of nodes until the wiring spells your name. |
+| 💡 **Halo Rings** | Glowing rings orbit the dark, then peel off particles to build your name. |
+| ⛈️ **Storm Clouds** | Moonlit clouds drift and flash; your name condenses out of the vapour. |
+| 🦠 **Living Cells** | A restless colony divides and glows, growing your name as living tissue. |
 
 *Shuffle mode rotates through the worlds automatically at your chosen interval.*
 
@@ -123,6 +128,7 @@ It will become playable there once Pages is enabled and the site is published. F
 - [x] Build the bilingual start page, name settings, and screensaver engine
 - [x] Add fullscreen entry/exit behavior, Wake Lock support, and ambient sound controls
 - [x] Implement all 22 visual modes, including three campfire scenes
+- [x] Add five Vanta-inspired worlds (Topology Mesh, Neural Network, Halo Rings, Storm Clouds, Living Cells)
 - [x] Add shuffle, live hover previews, share links, and Bengali clock/calendar support
 - [ ] Review the live preview on desktop and mobile, then polish from feedback
 - [ ] Publish the static site on GitHub Pages
