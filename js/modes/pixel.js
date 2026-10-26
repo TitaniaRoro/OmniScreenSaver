@@ -14,7 +14,7 @@ import { noise2, fbm2, mulberry32 } from "../motion.js";
 const VIEW_W = 400;
 const VIEW_H = 225;
 
-export function createMode({ canvas, name, language = "bn", showName, preview = false }) {
+export function createMode({ canvas, name, language = "bn", showName, emitSound = () => {}, preview = false }) {
   const surface = setup2D(canvas, "#080e1c");
   const { ctx } = surface;
   const style = typeStyle("pixel");

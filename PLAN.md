@@ -6,7 +6,7 @@ Build OmniScreenSaver as a static, browser-based screensaver-style web page for 
 
 ## Requirements
 
-- At least 13 visual modes; the current set contains 19, including three campfire scenes.
+- At least 13 visual modes; the current set contains 22, including three campfire scenes and two premium 3D effects.
 - Every gallery tile is a live animation, not a still thumbnail. Only visible/near-visible previews render, and offscreen previews are torn down to protect battery and GPU time.
 - Endless animation loop, responsive canvas rendering, and best-effort fullscreen support.
 - Each mode has its own name typeface, color/effect treatment, and reveal choreography; new fonts are self-hosted with Bengali-capable fallbacks.
@@ -50,6 +50,9 @@ Build OmniScreenSaver as a static, browser-based screensaver-style web page for 
 17. Campfire Night
 18. Beach Bonfire
 19. Pixel Campfire
+20. Shattering Name
+21. Layered Camp 3D
+22. Isometric Cube
 
 A Shuffle option rotates through modes at the selected interval.
 
@@ -65,9 +68,9 @@ A Shuffle option rotates through modes at the selected interval.
 ## Milestones
 
 1. **Foundation:** start page, bilingual UI, settings, responsive animation engine, fullscreen/exit behavior, local Bengali fonts, name-shape helper, audio system, and the first modes.
-2. **Full gallery:** implement all 19 modes, ambient sound profiles, Shuffle, Gallery previews, and clock/calendar details.
+2. **Full gallery:** implement all 22 modes, ambient sound profiles, Shuffle, Gallery previews, and clock/calendar details.
 3. **Polish:** accessibility and performance pass, README, favicon, tests, and GitHub Pages deployment after explicit approval.
 
 ## Status
 
-The complete 19-mode static site is implemented on the Arena working branch. All gallery previews are animated and viewport-budgeted; each world has its own type treatment and reveal, and the three fire scenes share a combustion particle model. JavaScript syntax/mode checks, Bengali grapheme/calendar tests, translation-key checks, font-file checks, and Canvas rendering smoke tests pass. A live static preview is available in the workspace. GitHub Pages remains disabled; the README Play link becomes live after deployment and explicit approval.
+The complete 22-mode static site is implemented on the Arena working branch. All gallery previews are animated and viewport-budgeted; each world has its own type treatment and reveal, and the three fire scenes share a combustion particle model. JavaScript syntax/mode checks, Bengali grapheme/calendar tests, translation-key checks, font-file checks, and Canvas rendering smoke tests pass. A live static preview is available in the workspace. GitHub Pages remains disabled; the README Play link becomes live after deployment and explicit approval.

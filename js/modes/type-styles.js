@@ -194,6 +194,16 @@ export const TYPE_STYLES = {
     reveal: "flip",
     note: "Quiet serif greeting under the flip clock."
   },
+  pixel: {
+    family: FONTS.pixel,
+    weight: 400,
+    tracking: 0.06,
+    slant: 0,
+    palette: { core: "#c4ffd9", edge: "#48ff9c", glow: "#2bff86", accent: "#8dffbe" },
+    effects: ["glow", "cells"],
+    reveal: "blockBuild",
+    note: "Ember-lit arcade blocks that snap together one pixel step at a time on the camp sign."
+  },
   campfire: {
     family: FONTS.serif,
     weight: 400,

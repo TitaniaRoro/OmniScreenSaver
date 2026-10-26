@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "A bilingual fullscreen screensaver-style web experience with 19 ambient animation modes.",
+  "description": "A bilingual fullscreen screensaver-style web experience with 22 ambient animation modes.",
   "scripts": {
     "check": "node scripts/check-modes.mjs && node --test tests/*.test.mjs"
   },
