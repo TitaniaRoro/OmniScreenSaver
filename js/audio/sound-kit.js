@@ -19,7 +19,12 @@ const PROFILES = {
   beach:        { noise: .11, filter: 740, filterType: "lowpass", tones: [65.41, 98], type: "sine", lfo: .025, cue: "wave", interval: 6.5 },
   layered:      { noise: .09, filter: 620, filterType: "bandpass", tones: [65.41, 98, 130.81], type: "sine", lfo: .05, cue: "crackle", interval: 4.6 },
   shatter:      { noise: .02, filter: 1600, filterType: "highpass", tones: [98, 146.83, 220], type: "sine", lfo: .05, cue: "glassBreak", interval: 12 },
-  cube:         { noise: .028, filter: 420, filterType: "lowpass", tones: [73.42, 110, 146.83], type: "triangle", lfo: .07, cue: "cubeBounce", interval: 5.5 }
+  cube:         { noise: .028, filter: 420, filterType: "lowpass", tones: [73.42, 110, 146.83], type: "triangle", lfo: .07, cue: "cubeBounce", interval: 5.5 },
+  topology:     { noise: .05, filter: 950, filterType: "bandpass", tones: [98, 146.83, 196], type: "sine", lfo: .05, cue: "contourSweep", interval: 9 },
+  net:          { noise: .022, filter: 1300, filterType: "bandpass", tones: [82.41, 123.47, 164.81], type: "sine", lfo: .09, cue: "signalPing", interval: 6 },
+  halo:         { noise: .03, filter: 1200, filterType: "lowpass", tones: [110, 164.81, 246.94], type: "sine", lfo: .045, cue: "haloShimmer", interval: 10 },
+  clouds:       { noise: .1, filter: 420, filterType: "lowpass", tones: [49, 65.41], type: "sine", lfo: .03, cue: "thunderRumble", interval: 12 },
+  cells:        { noise: .04, filter: 780, filterType: "bandpass", tones: [123.47, 185, 246.94], type: "sine", lfo: .06, cue: "cellDivide", interval: 5 }
 };
 
 function createNoiseBuffer(context) {
@@ -108,6 +113,11 @@ export function createAmbientScene(sceneId, context, destination) {
         break;
       }
       case "cubeBounce": playTone(196, 110, .3, .012, "triangle"); playTone(784, 588, .18, .004, "sine", .02); break;
+      case "contourSweep": playNoise(1.4, .01, 900, "bandpass"); playTone(330, 440, 1.2, .005, "sine"); break;
+      case "signalPing": playTone(1046.5, 880, .3, .007, "sine"); playTone(1318.5, 1046.5, .22, .004, "sine", .08); break;
+      case "haloShimmer": playTone(880, 1174.66, .9, .006, "sine"); playTone(1174.66, 1567.98, .7, .004, "sine", .12); break;
+      case "thunderRumble": playNoise(2.2, .016, 140, "lowpass"); playTone(41.2, 30.87, 1.8, .008, "sine"); break;
+      case "cellDivide": playTone(523.25, 659.25, .35, .006, "sine"); playTone(659.25, 523.25, .3, .004, "sine", .18); break;
       default: playTone(440, 392, .7, .006); break;
     }
   }
