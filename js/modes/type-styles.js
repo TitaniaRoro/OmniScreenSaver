@@ -227,6 +227,28 @@ export const TYPE_STYLES = {
     effects: ["extrude", "ember"],
     reveal: "slabStack",
     note: "Letters assembled as solid isometric slabs that rise out of the ground."
+  },
+  shatter: {
+    family: FONTS.tech,
+    weight: 800,
+    tracking: 0.06,
+    slant: 0,
+    scale: 1,
+    palette: { core: "#eef2ff", edge: "#b9c6f2", glow: "#7d8cff", accent: "#ffffff" },
+    effects: ["glow"],
+    reveal: "crackFall",
+    note: "Glass-like lettering that a crack sweeps through before it falls apart into tumbling shards."
+  },
+  cube: {
+    family: FONTS.pixel,
+    weight: 400,
+    tracking: 0.12,
+    slant: 0,
+    scale: 1,
+    palette: { core: "#ffe08a", edge: "#ffb347", glow: "#ff8c3a", accent: "#fff6d8" },
+    effects: ["outlineThin", "glow"],
+    reveal: "stampIn",
+    note: "Chunky arcade capitals stamped onto the faces of a bouncing voxel cube."
   }
 };
 
