@@ -1,4 +1,4 @@
-import { setup2D, TAU, clamp, random, lerp, rgba, drawStyledName, drawVignette, drawGlowDot } from "./common.js";
+import { nameSize, setup2D, TAU, clamp, random, lerp, rgba, drawStyledName, drawVignette, drawGlowDot } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { noise2, fbm3 } from "../motion.js";
 
@@ -192,7 +192,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
       maskCtx.clearRect(0, 0, width, height);
       drawStyledName(maskCtx, name, width / 2, nameY, {
         style,
-        size: Math.min(height * 0.15, width * 0.075),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.6,
         maxHeight: height * 0.15,
         minSize: 12,
@@ -237,7 +237,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
 
       drawStyledName(ctx, name, width / 2, nameY, {
         style,
-        size: Math.min(height * 0.15, width * 0.075),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.6,
         maxHeight: height * 0.15,
         minSize: 12,

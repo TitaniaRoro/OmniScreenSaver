@@ -1,4 +1,4 @@
-import {
+import { nameSize,
   setup2D, TAU, clamp, rgba, roundedRect,
   drawStyledName, drawVignette, makeStarField, drawTwinklingStars
 } from "./common.js";
@@ -236,7 +236,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
     if (showName) {
       drawStyledName(ctx, greeting, width / 2, height * 0.73, {
         style,
-        size: Math.min(height * 0.075, width * 0.045),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.82,
         maxHeight: height * 0.08,
         minSize: 12,

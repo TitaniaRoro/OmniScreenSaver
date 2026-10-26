@@ -1,7 +1,6 @@
-import { setup2D, clamp, smoothstep, drawStyledName, drawVignette, makeStarField, drawTwinklingStars } from "./common.js";
+import { nameSize, setup2D, clamp, smoothstep, drawStyledName, drawVignette, makeStarField, drawTwinklingStars, measureName, rgba } from "./common.js";
 import { typeStyle } from "./type-styles.js";
 import { fbm3 } from "../motion.js";
-import { splitGraphemes } from "../text.js";
 
 /**
  * Aurora.
@@ -185,7 +184,7 @@ function createCanvasFallback(canvas, name, language, showName, preview) {
       const reveal = clamp(((time % 16) - 3) / 4.5, 0, 1);
       drawStyledName(ctx, name, width / 2, height * 0.5, {
         style,
-        size: Math.min(height * 0.15, width * 0.075),
+        size: nameSize(style, width, height),
         maxWidth: width * 0.66,
         maxHeight: height * 0.16,
         minSize: 12,
@@ -256,31 +255,25 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
     textCtx = textCanvas.getContext("2d");
     const style = typeStyle("aurora");
     if (showName) {
+      // Render the name through the same measurement + palette pipeline the
+      // Canvas fallback uses, so the WebGL curtain and the 2D aurora show the
+      // identical lettering (same tracking, size cap and colours).
       textCtx.textAlign = "center";
       textCtx.textBaseline = "middle";
-      let fontSize = 105;
-      textCtx.font = `${style.weight} ${fontSize}px ${style.family}`;
-      let width2 = textCtx.measureText(name).width;
-      while (width2 > 940 && fontSize > 44) {
-        fontSize -= 6;
-        textCtx.font = `${style.weight} ${fontSize}px ${style.family}`;
-        width2 = textCtx.measureText(name).width;
-      }
-      const tracking = (style.tracking || 0) * fontSize;
-      const clusters = splitGraphemes(name, language);
-      const widths = clusters.map(cluster => textCtx.measureText(cluster).width);
-      const total = widths.reduce((sum, value) => sum + value, 0) + tracking * Math.max(0, clusters.length - 1);
-      let cursor = 512 - total / 2;
+      const fontSize = nameSize(style, 1024 / 0.08 * 0.6, 256 / 0.15 * 0.6, { min: 44, max: 105 });
+      const metrics = measureName(textCtx, name, style, fontSize, language);
+      let cursor = 512 - metrics.total / 2;
       const paint = textCtx.createLinearGradient(0, 60, 0, 200);
-      paint.addColorStop(0, "rgba(226,255,246,.98)");
-      paint.addColorStop(0.5, "rgba(140,255,220,.95)");
-      paint.addColorStop(1, "rgba(198,172,255,.96)");
-      textCtx.shadowColor = "#55f6c5";
+      paint.addColorStop(0, rgba(style.palette.core, 0.98));
+      paint.addColorStop(0.5, rgba(style.palette.edge, 0.95));
+      paint.addColorStop(1, rgba(style.palette.accent, 0.96));
+      textCtx.font = `${style.weight} ${fontSize}px ${style.family}`;
+      textCtx.shadowColor = style.palette.glow;
       textCtx.shadowBlur = 16;
       textCtx.fillStyle = paint;
-      for (let index = 0; index < clusters.length; index++) {
-        textCtx.fillText(clusters[index], cursor + widths[index] / 2, 128);
-        cursor += widths[index] + tracking;
+      for (let index = 0; index < metrics.clusters.length; index++) {
+        textCtx.fillText(metrics.clusters[index], cursor + metrics.widths[index] / 2, 128);
+        cursor += metrics.widths[index] + metrics.tracking;
       }
     }
 
