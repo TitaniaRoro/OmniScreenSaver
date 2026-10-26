@@ -34,7 +34,7 @@ export function createMode({ canvas, name, shape, showName, preview = false }) {
     age = new Float32Array(cols * rows);
     fade = new Float32Array(cols * rows);
     if (showName) {
-      const targets = scaledNameTargets(shape, width, height, Math.min(1500, Math.floor(cols * rows * 0.26)), 0.68, 0.3);
+      const targets = scaledNameTargets(shape, width, height, Math.min(1500, Math.floor(cols * rows * 0.26)), 0.54, 0.23);
       for (const target of targets) {
         const x = Math.floor(target.x / cell);
         const y = Math.floor(target.y / cell);

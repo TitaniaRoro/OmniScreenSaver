@@ -163,7 +163,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
 
     if (showName) {
       const y = Math.min(height * 0.36, horizon - height * 0.06);
-      const size = Math.min(height * 0.19, width * 0.1);
+      const size = Math.min(height * 0.14, width * 0.075);
       // Reflection on the floor
       ctx.save();
       ctx.globalAlpha = 0.2;
@@ -173,7 +173,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
         style,
         size,
         maxWidth: width * 0.72,
-        maxHeight: height * 0.2,
+        maxHeight: height * 0.15,
         minSize: 12,
         language,
         time,
@@ -195,7 +195,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
           style,
           size,
           maxWidth: width * 0.72,
-          maxHeight: height * 0.2,
+          maxHeight: height * 0.15,
           minSize: 12,
           language,
           time,
@@ -210,7 +210,7 @@ export function createMode({ canvas, name, language = "en", showName, preview = 
         style,
         size,
         maxWidth: width * 0.72,
-        maxHeight: height * 0.2,
+        maxHeight: height * 0.15,
         minSize: 12,
         language,
         time,

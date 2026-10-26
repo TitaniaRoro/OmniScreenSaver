@@ -192,9 +192,9 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
       maskCtx.clearRect(0, 0, width, height);
       drawStyledName(maskCtx, name, width / 2, nameY, {
         style,
-        size: Math.min(height * 0.2, width * 0.1),
+        size: Math.min(height * 0.15, width * 0.075),
         maxWidth: width * 0.6,
-        maxHeight: height * 0.2,
+        maxHeight: height * 0.15,
         minSize: 12,
         language,
         time,
@@ -237,9 +237,9 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
 
       drawStyledName(ctx, name, width / 2, nameY, {
         style,
-        size: Math.min(height * 0.2, width * 0.1),
+        size: Math.min(height * 0.15, width * 0.075),
         maxWidth: width * 0.6,
-        maxHeight: height * 0.2,
+        maxHeight: height * 0.15,
         minSize: 12,
         language,
         time,

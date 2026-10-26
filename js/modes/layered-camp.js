@@ -64,7 +64,7 @@ export function createMode({ canvas, name, language = "bn", showName, preview = 
   function rebuildName() {
     if (!showName || !name) { cells = []; cellOrder = []; return; }
     const measured = measureTextCells(ctx, name, {
-      font: fontString(style, CELL * 4.4),
+      font: fontString(style, CELL * 3.3),
       cell: CELL,
       gap: 1,
       maxWidth: 200 // world units — keeps any name inside the diorama

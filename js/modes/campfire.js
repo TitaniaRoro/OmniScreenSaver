@@ -48,7 +48,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     stars = makeStarField(Math.round((preview ? 40 : 130) * clamp(width / 900, 0.6, 1.6)), width, height, { topRatio: 0.66 });
     embers = Array.from({ length: Math.round((preview ? 12 : 46) * quality) }, () => ({ x: fireX + random(-30, 30), y: fireY, vx: random(-14, 14), vy: random(-70, -18), life: random(0.2, 1), size: random(0.9, 2.6), seed: random(0, 90) }));
     namePoints = showName
-      ? scaledNameTargets(shape, width, height, Math.round((preview ? 42 : 190)), 0.46, preview ? 0.3 : 0.19, { x: 0, y: -height * 0.24 })
+      ? scaledNameTargets(shape, width, height, Math.round((preview ? 42 : 190)), 0.38, preview ? 0.25 : 0.15, { x: 0, y: -height * 0.24 })
       : [];
     fire.configure({ x: fireX, y: fireY, baseWidth: Math.max(16, Math.min(width, height) * (preview ? 0.06 : 0.085)), flameHeight: height * (preview ? 0.2 : 0.17) });
   }
@@ -251,9 +251,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       const hold = smoothstep(0.25, 0.85, gather);
       drawStyledName(ctx, name, width / 2, height * 0.27, {
         style,
-        size: Math.min(height * 0.16, width * 0.14),
+        size: Math.min(height * 0.12, width * 0.105),
         maxWidth: width * 0.62,
-        maxHeight: height * 0.18,
+        maxHeight: height * 0.14,
         language,
         time,
         alpha: hold * 0.92,

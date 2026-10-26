@@ -44,7 +44,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     height = h;
     const count = preview ? 5 : 11;
     blobs = Array.from({ length: count }, (_, index) => makeBlob(index, count));
-    targets = showName ? scaledNameTargets(shape, w, h, preview ? 60 : 150, 0.5, preview ? 0.3 : 0.18) : [];
+    targets = showName ? scaledNameTargets(shape, w, h, preview ? 60 : 150, 0.4, preview ? 0.24 : 0.14) : [];
   }
 
   function frame(dt, time) {
@@ -129,9 +129,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     if (showName && gather > 0.12) {
       drawStyledName(ctx, name, width / 2, height / 2, {
         style,
-        size: Math.min(height * 0.18, width * 0.1),
+        size: Math.min(height * 0.135, width * 0.075),
         maxWidth: width * 0.56,
-        maxHeight: height * 0.2,
+        maxHeight: height * 0.15,
         minSize: 12,
         language,
         time,

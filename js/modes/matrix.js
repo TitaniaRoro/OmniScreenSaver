@@ -102,7 +102,7 @@ export function createMode({ canvas, name, language = "en", showName, emitSound 
         ctx.fillRect(0, height * 0.38, width, height * 0.24);
         ctx.restore();
 
-        const size = Math.min(height * 0.2, width * 0.1);
+        const size = Math.min(height * 0.15, width * 0.075);
         const metrics = measureName(ctx, name, style, size, language);
         ctx.save();
         ctx.textAlign = "center";

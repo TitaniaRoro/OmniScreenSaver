@@ -46,7 +46,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
 
   /** Sample the name mask and order the points into a single closed contour. */
   function orderedOutline(shape, w, h) {
-    const targets = scaledNameTargets(shape, w, h, preview ? 90 : 220, 0.62, 0.26);
+    const targets = scaledNameTargets(shape, w, h, preview ? 90 : 220, 0.5, 0.2);
     if (targets.length < 8) return [];
     const cx = w / 2;
     const cy = h / 2;
@@ -135,9 +135,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     if (showName && reveal > 0.02) {
       drawStyledName(ctx, name, width / 2, height / 2, {
         style,
-        size: Math.min(height * 0.22, width * 0.12),
+        size: Math.min(height * 0.165, width * 0.09),
         maxWidth: width * 0.7,
-        maxHeight: height * 0.24,
+        maxHeight: height * 0.18,
         minSize: 12,
         language,
         time,

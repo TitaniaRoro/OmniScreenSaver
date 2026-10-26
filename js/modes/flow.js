@@ -50,7 +50,7 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
     height = h;
     const count = Math.round(Math.min(preview ? 90 : 780, Math.max(60, (w * h) / (preview ? 4200 : 2600))));
     particles = Array.from({ length: count }, () => respawn({}));
-    targets = showName ? scaledNameTargets(shape, w, h, preview ? 110 : 300, 0.62, 0.26) : [];
+    targets = showName ? scaledNameTargets(shape, w, h, preview ? 110 : 300, 0.5, 0.2) : [];
   }
 
   function frame(dt, time) {
@@ -65,9 +65,9 @@ export function createMode({ canvas, name, shape, language = "en", showName, emi
       ctx.globalCompositeOperation = "lighter";
       drawStyledName(ctx, name, width / 2, height / 2, {
         style,
-        size: Math.min(height * 0.2, width * 0.1),
+        size: Math.min(height * 0.15, width * 0.075),
         maxWidth: width * 0.72,
-        maxHeight: height * 0.26,
+        maxHeight: height * 0.2,
         minSize: 12,
         language,
         time,
