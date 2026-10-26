@@ -67,7 +67,7 @@ export function saveSettings(settings) {
 }
 
 export function makeShareUrl({ mode, name, language }) {
-  const url = new URL(globalThis.location?.href || "https://muya2026.github.io/OmniScreenSaver/");
+  const url = new URL(globalThis.location?.href || "https://TitaniaRoro.github.io/OmniScreenSaver/");
   url.search = "";
   if (mode) url.searchParams.set("mode", mode);
   if (name) url.searchParams.set("name", limitGraphemes(name, 24, language));

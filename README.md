@@ -9,7 +9,7 @@
 *A creative, fullscreen screensaver-style experience for the web — made for quiet moments, vivid motion, and ambient sound.*
 
 <p align="center">
-  <a href="https://muya2026.github.io/OmniScreenSaver/">
+  <a href="https://TitaniaRoro.github.io/OmniScreenSaver/">
     <img src="https://img.shields.io/badge/%E2%96%B6%20PLAY%20OMNISCREENSAVER-OPEN%20THE%20EXPERIENCE-7c3aed?style=for-the-badge" alt="▶ Play OmniScreenSaver — open the experience">
   </a>
   <br>
@@ -69,13 +69,15 @@ The gallery contains **27 visual modes**. Each mode has its own ambient sound pr
 | 🔥 **Campfire Night** | Firelight, pine silhouettes, and sparks that gather into your name. |
 | 🌊 **Beach Bonfire** | A moonlit shore where waves gently wash your name from the sand. |
 | 🏕️ **Pixel Campfire** | A cozy, retro pixel-art campsite with ember-lit lettering. |
-| 🗺️ **Topology Mesh** | Living contour lines rise into hills and sketch your name in the terrain. |
-| 🧠 **Neural Network** | Signals cross a drifting mesh of nodes until the wiring spells your name. |
-| 💡 **Halo Rings** | Glowing rings orbit the dark, then peel off particles to build your name. |
-| ⛈️ **Storm Clouds** | Moonlit clouds drift and flash; your name condenses out of the vapour. |
-| 🦠 **Living Cells** | A restless colony divides and glows, growing your name as living tissue. |
+| 🗺️ **Topology Mesh** | A WebGL terrain breathes in 3D; living contour lines rise into hills and sketch your name in the terrain. |
+| 🧠 **Neural Network** | Signals cross a drifting 3D mesh of nodes until the wiring spells your name. |
+| 💡 **Halo Rings** | Glowing rings orbit the dark in true perspective, then peel off particles to build your name. |
+| ⛈️ **Storm Clouds** | Raymarched moonlit clouds drift and flash; your name condenses out of the vapour. |
+| 🦠 **Living Cells** | A GPU Worley colony divides and glows, growing your name as living tissue. |
 
 *Shuffle mode rotates through the worlds automatically at your chosen interval.*
+
+The five Vanta-inspired worlds above render as real 3D WebGL scenes with three.js (bundled via npm — no CDN). Browsers without WebGL gracefully fall back to hand-written Canvas-2D versions of the same choreography.
 
 ## 🔊 Sound, softly done
 
@@ -119,7 +121,7 @@ npm run check
 
 The Play button at the top points to the intended GitHub Pages address:
 
-**https://muya2026.github.io/OmniScreenSaver/**
+**https://TitaniaRoro.github.io/OmniScreenSaver/**
 
 It will become playable there once Pages is enabled and the site is published. Fullscreen and audio depend on browser support and user permissions; on devices that restrict fullscreen, the page fills the available screen area instead.
 
@@ -135,9 +137,11 @@ It will become playable there once Pages is enabled and the site is published. F
 
 ## 👩‍💻 Developer credit
 
-**Project creator and developer:** [@muya2026](https://github.com/muya2026)
+**Project creator and developer:** [@TitaniaRoro](https://github.com/TitaniaRoro)
 
 ## 📄 License
+
+Copyright © 2026 [TitaniaRoro](https://github.com/TitaniaRoro)
 
 OmniScreenSaver is licensed under the **GNU General Public License v3.0**. See [`LICENSE`](LICENSE) for details.
 
